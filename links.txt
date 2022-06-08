@@ -1,0 +1,11 @@
+https://github.com/tensorflow/federated/tree/main/tensorflow_federated/examples/simple_fedavg
+
+https://tensorflow.google.cn/federated/tutorials/custom_federated_algorithm_with_tff_optimizers
+
+https://www.tensorflow.org/federated/api_docs/python/tff/learning/algorithms/build_unweighted_fed_avg
+
+https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/ClientData
+
+https://www.tensorflow.org/federated/api_docs/python/tff/experimental
+
+https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/TestClientData

@@ -1,0 +1,179 @@
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+package(default_visibility = [
+    ":mapreduce_packages",
+    "//tensorflow_federated/python/core:core_visibility",
+
+    # TODO(b/233800075): Remove dependency from `native` to `mapreduce`.
+    "//tensorflow_federated/python/core/backends/native:native_packages",
+])
+
+package_group(
+    name = "mapreduce_packages",
+    packages = ["//tensorflow_federated/python/core/backends/mapreduce/..."],
+)
+
+licenses(["notice"])
+
+py_library(
+    name = "mapreduce",
+    srcs = ["__init__.py"],
+    srcs_version = "PY3",
+    visibility = ["//tensorflow_federated/python/core/backends:__pkg__"],
+    deps = [
+        ":form_utils",
+        ":forms",
+    ],
+)
+
+py_library(
+    name = "compiler",
+    srcs = ["compiler.py"],
+    srcs_version = "PY3",
+    deps = [
+        "//tensorflow_federated/python/common_libs:py_typecheck",
+        "//tensorflow_federated/python/common_libs:structure",
+        "//tensorflow_federated/python/core/impl/compiler:building_block_factory",
+        "//tensorflow_federated/python/core/impl/compiler:building_blocks",
+        "//tensorflow_federated/python/core/impl/compiler:compiled_computation_transformations",
+        "//tensorflow_federated/python/core/impl/compiler:intrinsic_defs",
+        "//tensorflow_federated/python/core/impl/compiler:transformation_utils",
+        "//tensorflow_federated/python/core/impl/compiler:transformations",
+        "//tensorflow_federated/python/core/impl/compiler:tree_analysis",
+        "//tensorflow_federated/python/core/impl/compiler:tree_transformations",
+        "//tensorflow_federated/python/core/impl/computation:computation_impl",
+        "//tensorflow_federated/python/core/impl/context_stack:context_stack_impl",
+        "//tensorflow_federated/python/core/impl/tensorflow_context:tensorflow_computation",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:placements",
+        "//tensorflow_federated/python/core/impl/types:type_analysis",
+        "@absl_py//absl/logging",
+    ],
+)
+
+py_test(
+    name = "compiler_test",
+    srcs = ["compiler_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":compiler",
+        ":form_utils",
+        ":mapreduce_test_utils",
+        "//tensorflow_federated/proto/v0:computation_py_pb2",
+        "//tensorflow_federated/python/core/impl/compiler:building_block_factory",
+        "//tensorflow_federated/python/core/impl/compiler:building_blocks",
+        "//tensorflow_federated/python/core/impl/compiler:intrinsic_defs",
+        "//tensorflow_federated/python/core/impl/compiler:transformation_utils",
+        "//tensorflow_federated/python/core/impl/compiler:tree_analysis",
+        "//tensorflow_federated/python/core/impl/computation:computation_impl",
+        "//tensorflow_federated/python/core/impl/context_stack:set_default_context",
+        "//tensorflow_federated/python/core/impl/execution_contexts:sync_execution_context",
+        "//tensorflow_federated/python/core/impl/executors:executor_stacks",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:placements",
+        "//tensorflow_federated/python/core/impl/types:type_serialization",
+        "//tensorflow_federated/python/core/impl/types:type_test_utils",
+        "@absl_py//absl/testing:absltest",
+        "@org_tensorflow//tensorflow:tensorflow_py",
+    ],
+)
+
+py_library(
+    name = "forms",
+    srcs = ["forms.py"],
+    srcs_version = "PY3",
+    deps = [
+        "//tensorflow_federated/python/common_libs:py_typecheck",
+        "//tensorflow_federated/python/core/impl/computation:computation_base",
+        "//tensorflow_federated/python/core/impl/computation:computation_impl",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:type_analysis",
+    ],
+)
+
+py_test(
+    name = "forms_test",
+    srcs = ["forms_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":forms",
+        ":mapreduce_test_utils",
+        "//tensorflow_federated/python/core/impl/tensorflow_context:tensorflow_computation",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "@absl_py//absl/testing:absltest",
+        "@org_tensorflow//tensorflow:tensorflow_py",
+    ],
+)
+
+py_library(
+    name = "form_utils",
+    srcs = ["form_utils.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":compiler",
+        ":forms",
+        "//tensorflow_federated/python/common_libs:py_typecheck",
+        "//tensorflow_federated/python/common_libs:structure",
+        "//tensorflow_federated/python/core/impl/compiler:building_block_factory",
+        "//tensorflow_federated/python/core/impl/compiler:building_blocks",
+        "//tensorflow_federated/python/core/impl/compiler:transformation_utils",
+        "//tensorflow_federated/python/core/impl/compiler:transformations",
+        "//tensorflow_federated/python/core/impl/compiler:tree_analysis",
+        "//tensorflow_federated/python/core/impl/compiler:tree_transformations",
+        "//tensorflow_federated/python/core/impl/computation:computation_base",
+        "//tensorflow_federated/python/core/impl/computation:computation_impl",
+        "//tensorflow_federated/python/core/impl/federated_context:federated_computation",
+        "//tensorflow_federated/python/core/impl/federated_context:intrinsics",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:placements",
+        "//tensorflow_federated/python/core/templates:iterative_process",
+        "@org_tensorflow//tensorflow:tensorflow_py",
+    ],
+)
+
+py_test(
+    name = "form_utils_test",
+    size = "medium",
+    srcs = ["form_utils_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":form_utils",
+        ":forms",
+        ":mapreduce_test_utils",
+        "//tensorflow_federated/python/core/backends/test:execution_contexts",
+        "//tensorflow_federated/python/core/impl/compiler:building_blocks",
+        "//tensorflow_federated/python/core/impl/compiler:transformation_utils",
+        "//tensorflow_federated/python/core/impl/compiler:tree_analysis",
+        "//tensorflow_federated/python/core/impl/computation:computation_impl",
+        "//tensorflow_federated/python/core/impl/federated_context:federated_computation",
+        "//tensorflow_federated/python/core/impl/federated_context:intrinsics",
+        "//tensorflow_federated/python/core/impl/tensorflow_context:tensorflow_computation",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:placements",
+        "//tensorflow_federated/python/core/impl/types:type_test_utils",
+        "//tensorflow_federated/python/core/templates:iterative_process",
+        "@absl_py//absl/testing:parameterized",
+        "@org_tensorflow//tensorflow:tensorflow_py",
+    ],
+)
+
+py_library(
+    name = "mapreduce_test_utils",
+    testonly = True,
+    srcs = ["mapreduce_test_utils.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":forms",
+        "//tensorflow_federated/python/core/impl/compiler:building_blocks",
+        "//tensorflow_federated/python/core/impl/federated_context:federated_computation",
+        "//tensorflow_federated/python/core/impl/federated_context:intrinsics",
+        "//tensorflow_federated/python/core/impl/tensorflow_context:tensorflow_computation",
+        "//tensorflow_federated/python/core/impl/types:computation_types",
+        "//tensorflow_federated/python/core/impl/types:placements",
+        "//tensorflow_federated/python/core/templates:iterative_process",
+        "@org_tensorflow//tensorflow:tensorflow_py",
+    ],
+)
