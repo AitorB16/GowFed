@@ -23,8 +23,13 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_federated as tff
 
-from tensorflow_federated.examples.simple_fedavg import simple_fedavg_tf
-from tensorflow_federated.examples.simple_fedavg import simple_fedavg_tff
+import sys
+
+sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
+print(sys.path)
+
+import simple_fedavg_tf
+import simple_fedavg_tff
 
 
 def _create_test_cnn_model():
