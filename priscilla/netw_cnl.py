@@ -12,9 +12,9 @@ import os
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-import sys
-sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
-import simple_fedavg_tff
+#import sys
+#sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
+#import simple_fedavg_tff
 
 config_obj = configparser.ConfigParser()
 config_obj.read('cnl.ini')
@@ -77,11 +77,10 @@ cat_index_bool = [False] * 42
 for e in cat_indexs:
     cat_index_bool[e] = True
 
-train_data = data.head(TRAIN_SIZE).copy()
+train_data = data.head(TRAIN_SIZE)
 train_labels = train_data.pop('label')
-test_data = data.copy()
+test_data = data.tail(TEST_SIZE)
 test_labels = test_data.pop('label')
-test_labels = test_labels.tail(TEST_SIZE)
 
 
 train_gower_mat = gd.gower_matrix_limit_cols(train_data,TEST_SIZE,cat_features=cat_index_bool)
