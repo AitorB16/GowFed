@@ -6,10 +6,9 @@ import tensorflow_federated as tff
 
 import collections
 
-from absl import app
-
-import nest_asyncio
-nest_asyncio.apply()
+#from absl import app
+#import nest_asyncio
+#nest_asyncio.apply()
 
 import configparser
 import gower as gd
@@ -44,6 +43,11 @@ TEST_SIZE = int(init['test_size'])
 BALANCE_DATA = bool(int(init['balance_data']))
 PRINT_SCR = bool(int(init['print_scr']))
 
+SEED = int(init['seed'])
+
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+
 #path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
 path = 'results/fl/' + RUN_NAME + '/'
 
@@ -51,7 +55,7 @@ if not os.path.exists(path):
   os.mkdir(path)
 
 #Save cofiguration
-CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\n'
+CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\nseed = ' + str(SEED) + '\n'
 with open(path + 'conf.ini', 'w') as f: #Should be XML?
   f.write(CONFIG_STR)
 
@@ -71,12 +75,12 @@ if BALANCE_DATA:
     num_anom = len(df.loc[df['label']==1])
     df_anom = df.loc[df['label']==1]
     df_balance = df.loc[df['label']==0]
-    df_balance = df_balance.sample(num_anom, replace=False)
+    df_balance = df_balance.sample(num_anom, replace=False, random_state = SEED)
     df_concated = pd.concat([df_balance, df_anom])
     balanced_data = df_concated
     df = balanced_data
 
-data = df.sample(TRAIN_SIZE + TEST_SIZE, random_state=16)
+data = df.sample(TRAIN_SIZE + TEST_SIZE, random_state = SEED)
 
 
 cat_indexs = [0, 1, 2, 3, 4, 5, 9, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39, 40, 41]
@@ -168,7 +172,8 @@ test_fd_ds = tff.simulation.datasets.TestClientData(test_cl_dict)
 def evaluate(keras_model, test_dataset):
   """Evaluate the acurracy of a keras model on a test dataset."""
   #metric = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
-  metric = tf.keras.metrics.SparseCategoricalCrossentropy()
+  metric = tf.keras.metrics.BinaryCrossentropy()
+  #metric = tf.keras.metrics.BinaryAccuracy()
   for batch in test_dataset:
     predictions = keras_model(batch['x'])
     metric.update_state(y_true=batch['y'], y_pred=predictions)
@@ -215,28 +220,28 @@ def create_fedavg_model(only_digits=True):
   Returns:
     An uncompiled `tf.keras.Model`.
   """
-  initializer = tf.keras.initializers.GlorotNormal(seed=5)
+  initializer = tf.keras.initializers.GlorotNormal(seed=SEED)
   return tf.keras.models.Sequential([
     tf.keras.layers.Input(shape=(min_client_ds_size,)),
     #tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(66, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(69, activation="relu"),
+    tf.keras.layers.Dense(69, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dropout(0.1),
-    tf.keras.layers.Dense(69, activation="relu"),
+    tf.keras.layers.Dense(69, activation="relu", kernel_initializer=initializer),
     #tf.keras.layers.Dense(256, activation="relu"),
     #tf.keras.layers.Dense(256, activation="relu"),
     #tf.keras.layers.Dense(512, activation="relu"),
-    tf.keras.layers.Dense(11, activation="relu"),
-    tf.keras.layers.Dense(85, activation="relu"),
+    tf.keras.layers.Dense(11, activation="relu", kernel_initializer=initializer),
+    tf.keras.layers.Dense(85, activation="relu", kernel_initializer=initializer),
     #tf.keras.layers.Dense(256, activation="relu"),
     #tf.keras.layers.Dense(128, activation="relu"),
-    tf.keras.layers.Dense(2),
+    tf.keras.layers.Dense(2, kernel_initializer=initializer),
     #tf.keras.layers.Dropout(0.1)
     #tf.keras.layers.Dense(2, activation="relu"),
     #tf.keras.layers.Dense(32, activation="relu"),
     #tf.keras.layers.Dense(4, activation="relu"),
-    #tf.keras.layers.Dense(1, activation="sigmoid"),
-    tf.keras.layers.Softmax()
+    tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer=initializer)
+    #tf.keras.layers.Softmax()
     ])
 
 
@@ -268,8 +273,9 @@ train_data, valid_data = get_custom_dataset()
 def tff_model_fn():
   """Constructs a fully initialized model for use in federated averaging."""
   keras_model = create_fedavg_model(only_digits=True)
-  loss = tf.keras.losses.SparseCategoricalCrossentropy()
-  metrics = [tf.keras.metrics.SparseCategoricalAccuracy()]
+  loss = [tf.keras.losses.BinaryCrossentropy()]
+  #loss = tf.keras.losses.BinaryCrossentropy()
+  metrics = [tf.keras.metrics.BinaryAccuracy()]
   return tff.learning.from_keras_model(
       keras_model,
       loss=loss,
@@ -343,7 +349,7 @@ for i in range(0, NUM_CLIENTS):
     test = pd.DataFrame.from_dict(test_cl_dict[str(i)]).copy()
     labs = test.pop('label')
     preds = predict(keras_model, np.array(test))
-    results = save_stats(np.round(preds[:,1], decimals=0), labs.astype(int), PRINT_SCR)
+    results = save_stats(np.round(preds, decimals=0), labs.astype(int), PRINT_SCR)
     out = str(i) + ' ' + str(len(client_id_train[client_id_train==i])) + ' ' + results
     with open(path + 'stats.txt', 'a') as f:
         f.write(out + " \n")
@@ -367,3 +373,6 @@ with open(path + 'tr_loss.txt', 'w') as f:
 
 with open(path + 'val_loss.txt', 'w') as f:
   f.write(val_loss + "\n")
+
+#first_layer_weights = keras_model.layers[0].get_weights()[0]
+#print(first_layer_weights)
