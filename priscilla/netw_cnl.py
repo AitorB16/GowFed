@@ -84,8 +84,8 @@ test_labels = test_data.pop('label')
 
 
 train_gower_mat = gd.gower_matrix_limit_cols(train_data,TEST_SIZE,cat_features=cat_index_bool)
-test_gower_mat = gd.gower_matrix_limit_cols(test_data,TEST_SIZE,cat_features=cat_index_bool)
-test_gower_mat = test_gower_mat[TRAIN_SIZE:,:]
+test_gower_mat = gd.sliced_gower_matrix_limit_cols(test_data,TEST_SIZE, TRAIN_SIZE,cat_features=cat_index_bool)
+#test_gower_mat = test_gower_mat[TRAIN_SIZE:,:]
 
 
 def create_keras_model():
