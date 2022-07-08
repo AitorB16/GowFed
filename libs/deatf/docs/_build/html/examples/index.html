@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Auxiliar functions for testing" href="aux_functions_testing.html" />
+    <link rel="prev" title="Network" href="../api/network.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aux_functions_testing.html" title="Auxiliar functions for testing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api/network.html" title="Network"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Examples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>This section show and explain all the examples used in DEATF. These examples are divided in two: the simple cases where predefined network descriptors are evaluated individualy and the custom cases that use custom evaluation functions and network descriptors are combined in order to create more complex networks.</p>
+<section id="examples-of-the-predefined-networks">
+<h2>Examples of the predefined networks<a class="headerlink" href="#examples-of-the-predefined-networks" title="Permalink to this headline">¶</a></h2>
+<p>These cases are a collection of files where each one is for testing a predefined network. Due to that each file only uses one type of network, these files are ideal for testing. If new mutations are added or any change is done to the <a class="reference internal" href="../api/network.html#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> or <a class="reference internal" href="../api/network.html#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkDescriptor</span></code></a> these would be the test to verify if everything has been correctly done.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="aux_functions_testing.html">Auxiliar functions for testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_mlp.html">Predefined MLP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_cnn.html">Predefined CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_tcnn.html">Predefined TCNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_rnn.html">Predefined RNN</a></li>
+</ul>
+</div>
+</section>
+<section id="custom-examples">
+<h2>Custom examples<a class="headerlink" href="#custom-examples" title="Permalink to this headline">¶</a></h2>
+<p>These other cases are examples of applications where combinations and more complex models are used. They also define different levels of complexity in the evaluation method: predefined evalautions, creating functions and even creating the step of training.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_encoder.html">Autoencoder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnn_ae.html">Convolution Neural Network - Autoencoder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnn_class.html">Convolutional Neural Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gan.html">Generative Adversarial Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi.html">Multi-Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rnn.html">Recurrent Neural Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sequential.html">Sequential Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple.html">Multi Layer Perceptron</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_skip.html">Single Skip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wann.html">Weighted Neural Network</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#examples-of-the-predefined-networks">Examples of the predefined networks</a></li>
+<li><a class="reference internal" href="#custom-examples">Custom examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../api/network.html"
+                        title="previous chapter">Network</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aux_functions_testing.html"
+                        title="next chapter">Auxiliar functions for testing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aux_functions_testing.html" title="Auxiliar functions for testing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../api/network.html" title="Network"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Examples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

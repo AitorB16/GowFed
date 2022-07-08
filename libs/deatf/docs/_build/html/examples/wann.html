@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Weighted Neural Network &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="../install.html" />
+    <link rel="prev" title="Single Skip" href="single_skip.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../install.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="single_skip.html" title="Single Skip"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Weighted Neural Network</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-wann">
+<span id="weighted-neural-network"></span><h1>Weighted Neural Network<a class="headerlink" href="#module-wann" title="Permalink to this headline">¶</a></h1>
+<p>This is a use case of DEATF where a weighted artificial neural network (WANN) is used.</p>
+<p>This is a case like the simple.py example because only one MLP is used to solve the 
+problem. The difference is that here the weights are not randomly initialized, they
+are loaded to the model like hyperparameters and as hyperparameters they are evolved.
+So is an aproach of weight evolving. This is a classification problem, but in order
+to simplify it it has be turned into a binary classification problem.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="wann.eval_wann">
+<span class="sig-prename descclassname"><span class="pre">wann.</span></span><span class="sig-name descname"><span class="pre">eval_wann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wann.eval_wann" title="Permalink to this definition">¶</a></dt>
+<dd><p>This evaluation case is different to the ones in the other examples and 
+not because of the model’s building. The difference is that the weigths 
+are loaded into the model and this implies that it do not need to train,
+once the weights are loaded the model can predict. In orddr to evaluate 
+the performance it is used the mean of the cases that have been well 
+predicted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nets</strong> – Dictionary with the networks that will be used to build the 
+final network and that represent the individuals to be 
+evaluated in the genetic algorithm.</p></li>
+<li><p><strong>train_inputs</strong> – Input data for training, this data will only be used to 
+give it to the created networks and train them.</p></li>
+<li><p><strong>train_outputs</strong> – Output data for training, it will be used to compare 
+the returned values by the networks and see their performance.</p></li>
+<li><p><strong>batch_size</strong> – Number of samples per batch are used during training process.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each network will be trained.</p></li>
+<li><p><strong>test_inputs</strong> – Input data for testing, this data will only be used to 
+give it to the created networks and test them. It can not be used during
+training in order to get a real feedback.</p></li>
+<li><p><strong>test_outputs</strong> – Output data for testing, it will be used to compare 
+the returned values by the networks and see their real performance.</p></li>
+<li><p><strong>hypers</strong> – Hyperparameters that are being evolved and used in the process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Mean of the cases that have been well predicted that evaluates the true
+performance of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="single_skip.html"
+                        title="previous chapter">Single Skip</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../install.html"
+                        title="next chapter">Installation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/wann.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../install.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="single_skip.html" title="Single Skip"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Weighted Neural Network</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

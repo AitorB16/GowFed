@@ -1,5 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./federated/tensorflow_federated/examples/simple_fedavg"
-    ]
-}

@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Auxiliary Functions &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evolution" href="evolution.html" />
+    <link rel="prev" title="DEATF" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="evolution.html" title="Evolution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="DEATF"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Auxiliary Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-deatf.auxiliary_functions">
+<span id="auxiliary-functions"></span><h1>Auxiliary Functions<a class="headerlink" href="#module-deatf.auxiliary_functions" title="Permalink to this headline">¶</a></h1>
+<p>Here are the auxiliary functions that are used in the rest of the programs. These functions 
+can be divided in three groups:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>A function for dividing the data in batches.</p></li>
+<li><p>Some functions for evaluation predicted values returned by the network.</p></li>
+<li><p>Functions to load data (fashion and mnist).</p></li>
+</ol>
+</div></blockquote>
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.batch">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract from the given data a batch that go from the position i
+to the i + n; being n the batch size .</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Set of solutions intended to be fed to the network.</p></li>
+<li><p><strong>n</strong> – Size of the desired batch.</p></li>
+<li><p><strong>i</strong> – Index of the last solution used in the last epoch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The batch of data form x with size n since the index i of the data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.mse">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the mean squared error with numpy functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True data, is the ground of truth in the evaluation.</p></li>
+<li><p><strong>prediction</strong> – Predicted data, is the data that is evaluated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The mean squared error calculated between the true and predicted data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.accuracy_error">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">accuracy_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.accuracy_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the accuracy error with numpy functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True data, is the ground of truth in the evaluation.</p></li>
+<li><p><strong>prediction</strong> – Predicted data, is the data that is evaluated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The accuracy error calculated between the true and predicted data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.balanced_accuracy">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">balanced_accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.balanced_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the balanced accuracy with numpy functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> – True data, is the ground of truth in the evaluation.</p></li>
+<li><p><strong>prediction</strong> – Predicted data, is the data that is evaluated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The balaced accuracy error calculated between the true and predicted data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.load_fashion">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">load_fashion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.load_fashion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and returns the data from the fashion mnist dataset and is returned already
+divided in train, validation and test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Data of fashion mnist dataset divided in train, test and validation
+(x_train, y_train, x_test, y_test, x_val, y_val).</p>
+</dd>
+<dt class="field-even">Rtype x_train</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (42000, 28, 28), 
+containing the training data.</p>
+</dd>
+<dt class="field-odd">Rtype y_train</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (42000,) 
+for the training data.</p>
+</dd>
+<dt class="field-even">Rtype x_test</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (10000, 28, 28), 
+containing the test data.</p>
+</dd>
+<dt class="field-odd">Rtype y_test</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (10000,) 
+for the test data.</p>
+</dd>
+<dt class="field-even">Rtype x_val</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (18000, 28, 28), 
+containing the validation data.</p>
+</dd>
+<dt class="field-odd">Rtype y_val</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (18000,) 
+for the validation data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.auxiliary_functions.load_mnist">
+<span class="sig-prename descclassname"><span class="pre">deatf.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">load_mnist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.auxiliary_functions.load_mnist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and returns the data from the mnist dataset and is returned already
+divided in train, validation and test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Data of mnist dataset divided in train, test and validation
+(x_train, y_train, x_test, y_test, x_val, y_val).</p>
+</dd>
+<dt class="field-even">Rtype x_train</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (42000, 28, 28), 
+containing the training data. Pixel values range from 0 to 255.</p>
+</dd>
+<dt class="field-odd">Rtype y_train</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (42000,) 
+for the training data.</p>
+</dd>
+<dt class="field-even">Rtype x_test</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (10000, 28, 28), 
+containing the test data. Pixel values range from 0 to 255.</p>
+</dd>
+<dt class="field-odd">Rtype y_test</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (10000,)
+for the test data.</p>
+</dd>
+<dt class="field-even">Rtype x_val</dt>
+<dd class="field-even"><p>uint8 NumPy array of grayscale image data with shapes (18000, 28, 28), 
+containing the validation data. Pixel values range from 0 to 255.</p>
+</dd>
+<dt class="field-odd">Rtype y_val</dt>
+<dd class="field-odd"><p>uint8 NumPy array of labels (integers in range 0-9) with shape (18000,) 
+for the validation data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">DEATF</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="evolution.html"
+                        title="next chapter">Evolution</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/auxiliary_functions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="evolution.html" title="Evolution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="DEATF"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Auxiliary Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

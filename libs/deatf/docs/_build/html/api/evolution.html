@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Evolution &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mutation" href="mutation.html" />
+    <link rel="prev" title="Auxiliary Functions" href="auxiliary_functions.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="auxiliary_functions.html" title="Auxiliary Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Evolution</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-deatf.evolution">
+<span id="evolution"></span><h1>Evolution<a class="headerlink" href="#module-deatf.evolution" title="Permalink to this headline">¶</a></h1>
+<p>Here there can be found the classes responsible of the evolution of the netwroks.
+This is a key part of the library, in charge of initializing and evolving the 
+desired networks, using other class to achieve it. Is also important because is 
+the one that the user will make use of.</p>
+<p><a class="reference internal" href="#deatf.evolution.Evolving" title="deatf.evolution.Evolving"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evolving</span></code></a> class is the main class and the one in charge of evolving model descriptors.
+Those descriptors and the atributes specified in the initialization will generate
+network to evolve; so the stepts to follow are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Initialize this class with all the desired qualities.</p></li>
+<li><p>Call <code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code> function.</p></li>
+</ol>
+</div></blockquote>
+<p><a class="reference internal" href="#deatf.evolution.DescriptorContainer" title="deatf.evolution.DescriptorContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DescriptorContainer</span></code></a> is just an auxiliar class to help Evolving. It is 
+used with the DEAP library and it represent the individul to be evolved.</p>
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.evolution.DescriptorContainer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.evolution.</span></span><span class="sig-name descname"><span class="pre">DescriptorContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desc_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.DescriptorContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Auxiliar class for DEAP algorithm. This object will represent the individual
+that will be evolved in the Genetic Algorithm with DEAP. It contains a dictionary
+with the networks descriptors and the hyperparameters that will be evolved.
+In this dictionary ‘nX’ will be the key for each network descriptor (where X is the
+number of the descripor, starting from 0) and ‘hypers’ will be the key for the 
+hyperparameters.
+This class does not require a fitness attribute because it will be added 
+later by the DEAP’s creator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>desc_list</strong> – A dictionary containing the descriptors of the 
+networks and hyperparameters that will be evolved 
+with DEAP algorithm.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.evolution.</span></span><span class="sig-name descname"><span class="pre">Evolving</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desc_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_tests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_tests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evol_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evol_alg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mu_plus_lambda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is the main class and contains all the needed functions and atributes
+in order to realize the evolution. As is can be seen this class has many 
+atributes to initialice, this is due to its high cutomization. Many of 
+the parameters (like evol_kwargs or sel_kwargs) are not neccesary unless 
+custom evoluationary or selection functions are used.</p>
+<p>In order to facilitate the use of this class, here is a table with the atributes
+used in the initialization of it. Is divided in three columns:</p>
+<ul class="simple">
+<li><p>Required atributes: atributes that always have to be declared, because
+otherwise the initialization will be inclompleted and it will give an error.</p></li>
+<li><p>Predefined atributes: atributes that are necesary and have to be declared but
+they already predefined with a value and there is no need to define them 
+(it will run, but with the predefined values), but they can be defined by the 
+user and custom the execution. 
+For example, evol_alg is intialize with ‘mu_plus_lambda’ algorithm and if Evolving 
+class is created without asigning a value to ‘evol_alg it will run with it; but it
+can be declared and defined with ‘mu_comm_lambda’ or ‘simple’ algorithms.</p></li>
+<li><p>Optional atributes: atributes that are not needed, it can be initialiced without
+defining these atributes. Even so, they can be defined and the initialization will
+be more custom and with more options.</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 33%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Required attributes</p></th>
+<th class="head"><p>Predefined attributes</p></th>
+<th class="head"><p>Optional attributes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>n_inputs</p></td>
+<td><p>evol_alg</p></td>
+<td><p>evol_kwargs</p></td>
+</tr>
+<tr class="row-odd"><td><p>n_outputs</p></td>
+<td><p>sel</p></td>
+<td><p>sel_kwargs</p></td>
+</tr>
+<tr class="row-even"><td><p>desc_list</p></td>
+<td><p>max_num_neurons</p></td>
+<td><p>seed</p></td>
+</tr>
+<tr class="row-odd"><td><p>x_trains</p></td>
+<td><p>max_num_layers</p></td>
+<td><p>hyperpatameters</p></td>
+</tr>
+<tr class="row-even"><td><p>y_trains</p></td>
+<td><p>max_filter</p></td>
+<td><p>custom_mutations</p></td>
+</tr>
+<tr class="row-odd"><td><p>x_tests</p></td>
+<td><p>max_stride</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>y_tests</p></td>
+<td><p>dropout</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>population</p></td>
+<td><p>batch_norm</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>generations</p></td>
+<td><p>lrate</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>iters</p></td>
+<td><p>cxp</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>batch_size</p></td>
+<td><p>mtp</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>evaluation</p></td>
+<td><p>add_obj
+compl</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>By using the described atributes in the initialization and some functions defined
+in this class, an Evolving object is created. This is the first step in the evolving
+process and the most relevant one, because here is where decisions are taken. Then 
+by calling <a class="reference internal" href="#deatf.evolution.Evolving.evolve" title="deatf.evolution.Evolving.evolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">evolve()</span></code></a> function everything is done automaticaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_inputs</strong> – List of lists with the dimensions of the input sizes of each network.</p></li>
+<li><p><strong>n_outputs</strong> – List of lists with the dimensions of the output sizes of each network.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number of neurons in all layers (only relevant with MLP descriptors).</p></li>
+<li><p><strong>max_filter</strong> – Maximum size of filter (only relevant with CNN and TCNN descriptors).</p></li>
+<li><p><strong>max_stride</strong> – Maximum size of stride (only relevant with CNN and TCNN descriptors).</p></li>
+<li><p><strong>descriptors</strong> – List with all the network descriptors that are wanted to be evolved.</p></li>
+<li><p><strong>evaluation</strong> – Function for evaluating the model. A string in simple cases (‘MSE’ or ‘XEntropy’)
+and one defined by the user in complex cases.</p></li>
+<li><p><strong>batch_size</strong> – Number of samples per batch are used during training process.</p></li>
+<li><p><strong>lrate</strong> – Learning rate used during training process.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each model is trained.</p></li>
+<li><p><strong>train_inputs</strong> – Dictionary with the trainig input features for each network. The key is ‘iX’
+being X the network for which the data is and the value is the actual data.</p></li>
+<li><p><strong>train_outputs</strong> – Dictionary with the trainig output labels for each network. The key is ‘oX’
+being X the network for which the data is and the value is the actual data.</p></li>
+<li><p><strong>test_inputs</strong> – Dictionary with the testing input features for each network. The key is ‘iX’
+being X the network for which the data is and the value is the actual data.</p></li>
+<li><p><strong>test_outputs</strong> – Dictionary with the testing output labels for each network. The key is ‘oX’
+being X the network for which the data is and the value is the actual data.</p></li>
+<li><p><strong>complex</strong> – A boolean valeu that indicates if the network that is going to be evaluated is complex
+or not. The conditions for being complex are: if is indicated in initialization, if 
+user defined evalutaion method is used, if more than one network descriptor are 
+evolved or if the network descriptor to be evolved is different from a MLP. It is complex
+if occurs any of these conditions; otherwise, if none of the condition are true,
+is is considered simple (not complex).</p></li>
+<li><p><strong>toolbox</strong> – Object Toolbox() from deap.base in the DEAP algorithm.</p></li>
+<li><p><strong>selection</strong> – String that indicates the selection method used in the evolution. 
+Possibilities are: ‘best’, ‘tournament’, ‘roulette’, ‘random’ or ‘nsga2’.</p></li>
+<li><p><strong>evol_alg</strong> – String that indicates the evolution algorithm that will be used.
+Possibilities are: ‘simple’, ‘mu_plus_lambda’ or ‘mu_comm_lambda’.</p></li>
+<li><p><strong>evol_kwargs</strong> – Dictionary with parameters for the main DEAP function. The keys 
+for that parameters are:’ mu’, ‘lambda’, ‘cxpb’ or ‘mutpb’. Being
+mu and lambda to float values for the mu_plus_lambda algorithm 
+from DEAP. And cxpb and mutpb the crossover and mutation probabliites
+respectively.</p></li>
+<li><p><strong>cXp</strong> – Float value indicating the crossover probability. It will be 0 if there is only
+one descriptor to be evolved.</p></li>
+<li><p><strong>mtp</strong> – Float value indicating the crossover probability. It will be 1 if there is only
+one descriptor to be evolved.</p></li>
+<li><p><strong>generations</strong> – Number of generations that the evolution algorithm will be running.</p></li>
+<li><p><strong>population_size</strong> – Number of individuals that will be evaluated in each generation 
+of the evolution algorithm.</p></li>
+<li><p><strong>hypers</strong> – Hyperparameters to be evolved in the algorithm (e.g., optimizer, batch size).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.data_save">
+<span class="sig-name descname"><span class="pre">data_save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_tests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_tests</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.data_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data given by parameters in the atributes of data from the class Evolving, 
+it initialices those atributes (train_inputs, train_outputs, test_inputs and 
+test_outputs). That data can be given in dictionary or list format, if is 
+given as dictionary inputs’ key must be ‘iX’ and outputs’ ‘oX’ (being X the 
+number of data it is, first data will hava ‘i0’ and ‘o0’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_trains</strong> – Features data for training.</p></li>
+<li><p><strong>y_trains</strong> – Labels data for training.</p></li>
+<li><p><strong>x_tests</strong> – Features data for testing.</p></li>
+<li><p><strong>y_tests</strong> – Labels data for testing.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.define_evaluation">
+<span class="sig-name descname"><span class="pre">define_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.define_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the evaluation function. It accepts an string (‘MSE’ or ‘XEntropy)
+and it will use the predifined functions from TensorFlow; this will be done
+in simple cases. Otherwise, the evaluation function will be defined and passed
+by parameter by the user. If is defined by the user it has to folloe the next
+structure:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>It must have the next parameters in the following order:</dt><dd><ul>
+<li><p>nets (dictionary with the networks descriptors, where key ‘n0’ has the first 
+network descriptor).</p></li>
+<li><p>train_inputs (data for the training).</p></li>
+<li><p>train_outputs (expected outputs for the training).</p></li>
+<li><p>batch_size (size of the batch that is going to be taken from the train data).</p></li>
+<li><p>iters (number of iterations that each network will be trained).</p></li>
+<li><p>test_inputs (data for testing).</p></li>
+<li><p>test_outputs (expected outputs for the testing).</p></li>
+<li><p>hyperparameters (dictionary with the hyperparameters like ‘optimizer’ or ‘lrate’
+that also being evolved).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>The output must be: value, . It must be like that because it has to receive more than
+one output. The value is the fitness or evaluation value calculated in the function.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>evaluation</strong> – Evaluation function. Either string (predefined) or customized by the user.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.define_selection">
+<span class="sig-name descname"><span class="pre">define_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.define_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the selection method for the evolution algorithm. It can be used a predefined method
+from DEAP library (‘best’, ‘tournament’, ‘roulette’, ‘random’ and ‘nsga2’) or a selection method 
+defined by the user. If is defined by the user it has to follow the next structure:
+as parameters recieve at least individuals (list with all the individuals) and k (the number
+of individuals that will be selected) and as output it will return the list with the 
+selected individuals. Apart from the individuals and the number of selected ones, more 
+parameters can be used, thses should be defined in ‘sel_kwargs’ in the initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>selection</strong> – Selection function, Either string that indicates the selection method 
+(‘best’, ‘tournament’, ‘roulette’, ‘random’ or ‘nsga2’) or customized 
+by the user.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.define_evolving">
+<span class="sig-name descname"><span class="pre">define_evolving</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evol_alg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.define_evolving" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the evolutionary algorithm for the evolution. It uses predefined algorithms
+from DEAP library (‘simple’, ‘mu_plus_lambda’ or ‘mu_comm_lambda’) or a custom
+function defined by the user. This custom evolutionary algorithm function must follow
+the next structure:</p>
+<ul class="simple">
+<li><p>At least it has to receive the following parameters: population, toolbox, cxpb, 
+mutpb, ngen, stats=None, halloffame=None.</p></li>
+<li><p>More parameters can be used, they will have to be defined in evol_kwargs parameter
+in the initialization.</p></li>
+<li><p>It has to return population (the final population) and logbook (object from deap.tools.Logbook 
+with the statistics of the evolution).</p></li>
+<li><p>During the procces of the defined function, other functions defined in the
+toolbox can be used (selection, muatation or evalutaion).</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>evol_alg</strong> – Evolutionary algorithm. It can be either a string that indicates the 
+evolutionary algorithm (‘simple’, ‘mu_plus_lambda’ or ‘mu_comm_lambda’)
+or a defined evolutionary function by the user.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.is_complex">
+<span class="sig-name descname"><span class="pre">is_complex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.is_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if the case that will be evolved is a simple or a complex case.
+This will affect in the evaluation method used <a class="reference internal" href="#deatf.evolution.Evolving.simple_eval" title="deatf.evolution.Evolving.simple_eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">simple_eval()</span></code></a> or 
+<a class="reference internal" href="#deatf.evolution.Evolving.complex_eval" title="deatf.evolution.Evolving.complex_eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">complex_eval()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>compl</strong> – A boolean value that directly indicates if is a simple or 
+complex case.</p></li>
+<li><p><strong>evaluation</strong> – Evaluation parameter that is used for initialization 
+(string or function).</p></li>
+<li><p><strong>hyperparameters</strong> – Dictionary with the hyperparameters to ve evolved.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True boolean value if is a complex case and False boolean value
+if is a simple case.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.initialize_deap">
+<span class="sig-name descname"><span class="pre">initialize_deap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.initialize_deap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize DEAP function and atributes in order to be ready for evolutionary algorithm.
+In this function all the other functions that have been defined in <a class="reference internal" href="#deatf.evolution.Evolving.define_evaluation" title="deatf.evolution.Evolving.define_evaluation"><code class="xref py py-func docutils literal notranslate"><span class="pre">define_evaluation()</span></code></a>,
+<a class="reference internal" href="#deatf.evolution.Evolving.define_evolving" title="deatf.evolution.Evolving.define_evolving"><code class="xref py py-func docutils literal notranslate"><span class="pre">define_evolving()</span></code></a> and <a class="reference internal" href="#deatf.evolution.Evolving.define_selection" title="deatf.evolution.Evolving.define_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">define_selection()</span></code></a> will be added to the toolbox of DEAP.
+Also here the individuals <a class="reference internal" href="#deatf.evolution.DescriptorContainer" title="deatf.evolution.DescriptorContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DescriptorContainer</span></code></a> will be assigned as individuals 
+to be evolved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sel</strong> – Selection method.</p></li>
+<li><p><strong>sel_kwargs</strong> – Hyperparameters for the selection methods (e.g., size of the tournament 
+if that method is selected).</p></li>
+<li><p><strong>batch_norm</strong> – Whether the evolutive process includes batch normalization in the 
+networks or not.</p></li>
+<li><p><strong>dropout</strong> – Whether the evolutive process includes dropout in the networks or not.</p></li>
+<li><p><strong>custom_mutations</strong> – List with the desired mutations to be applied.</p></li>
+<li><p><strong>add_obj</strong> – Number of additional objectives.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.evolve">
+<span class="sig-name descname"><span class="pre">evolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.evolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that actualy applies the evolutionary algorithm. Using all the information
+provided in the initialization of the class, this function does the evolution. It will
+print the mean, standard, minimum and maximum values obtained form the individuals in
+each generation. Finally, it return the individuals from the lasta generation, the stats
+and the best individuals found during the algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The last generation, a log book (stats) and the hall of fame (the best 
+individuals found).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.init_individual">
+<span class="sig-name descname"><span class="pre">init_individual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.init_individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the individual that is going to be used and evolved during the evolutionary
+algorithm. That individual will be used as dictionary with the string network id as key 
+and the network descriptor as a value, i.e., {“net_id”: net_desc}. In simple case there
+will only be one network that is a MLP, in complex cases more than one network can be 
+evaluated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_ind</strong> – DEAP function for transforming a network descriptor, or a list of 
+descriptors + evolvable hyperparameters into a DEAP individual.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates whether batch normalization is 
+included into the evolution or not.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that incidates whether dropout is included into 
+the evolution or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A DEAP individual totaly initialized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.eval_individual">
+<span class="sig-name descname"><span class="pre">eval_individual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">individual</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.eval_individual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used for evaluating a DEAP individual during the evolutionary algorithm.
+This is the registered function for evalution and is an auxiliar function because
+it only does another calling depending on the type of evaluation (<a class="reference internal" href="#deatf.evolution.Evolving.simple_eval" title="deatf.evolution.Evolving.simple_eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">simple_eval()</span></code></a> or 
+<a class="reference internal" href="#deatf.evolution.Evolving.complex_eval" title="deatf.evolution.Evolving.complex_eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">complex_eval()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>individual</strong> – DEAP individual.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value obtained from the evaluation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.simple_eval">
+<span class="sig-name descname"><span class="pre">simple_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">individual</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.simple_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluation in the simple case. Function for evolving a single individual. 
+No need of the user providing a evaluation function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>individual</strong> – DEAP individual</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value obtained from the evaluation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.evolution.Evolving.complex_eval">
+<span class="sig-name descname"><span class="pre">complex_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">individual</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.Evolving.complex_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluation in the complex case. Function for evolving individuals in a 
+complex case. The user must have implemented the training and evaluation functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>individual</strong> – DEAP individual</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value obtained from the evaluation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.evolution.mutations">
+<span class="sig-prename descclassname"><span class="pre">deatf.evolution.</span></span><span class="sig-name descname"><span class="pre">mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.mutations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutation operators for individuals. It can be affected any network or hyperparameter.
+Depending on the type of network that will suffer the mutation, this function
+will create a different object from <a class="reference internal" href="mutation.html#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.mutation.Mutation</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – Hyperparameters not included in the networks to be evolved.</p></li>
+<li><p><strong>batch_normalization</strong> – Whether batch normalization is part of the evolution or not.</p></li>
+<li><p><strong>dropout</strong> – Whether dropout is part of the evolution or not.</p></li>
+<li><p><strong>individual</strong> – DEAP individual. Contains a dict where the keys are the components of the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Mutated version of the DEAP individual.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.evolution.cross">
+<span class="sig-prename descclassname"><span class="pre">deatf.evolution.</span></span><span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ind2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.evolution.cross" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crossover operator for individuals. Cannot be applied in the simple case, as it randomly 
+interchanges model components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_ind</strong> – DEAP function for initializing dicts (in this case) as DEAP individuals.</p></li>
+<li><p><strong>ind1</strong> – 1st individual to be crossed (first parent).</p></li>
+<li><p><strong>ind2</strong> – 2st individual to be crossed (second parent).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Two new DEAP individuals, the crossed versions of the incoming 
+parameters (the offspring).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="auxiliary_functions.html"
+                        title="previous chapter">Auxiliary Functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mutation.html"
+                        title="next chapter">Mutation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/evolution.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="auxiliary_functions.html" title="Auxiliary Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Evolution</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

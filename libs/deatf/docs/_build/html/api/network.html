@@ -1,0 +1,849 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Network &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Mutation" href="mutation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/index.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Network</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-deatf.network">
+<span id="network"></span><h1>Network<a class="headerlink" href="#module-deatf.network" title="Permalink to this headline">¶</a></h1>
+<p>Here there can be found two relevant classes in the library: <a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkDescriptor</span></code></a> and 
+<a class="reference internal" href="#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a>. These classes are directly linked between them and both have a principal
+and more abstract class and then one class for each network type that inherit from them.</p>
+<p><a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkDescriptor</span></code></a> and its subclasses are the ones responsible of establishing
+the structure and atributes that the network will have. All these classes have functions
+for a random initialization (to initialize individuals in the genetic algorithm) and
+functions to make changes and make easier the mutations. This would be the genotype in the 
+evolutionary algorithm.</p>
+<p><a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkDescriptor</span></code></a> and its subclasses are otherwise the phenotype, they are 
+the network itself constructed by using the TensorFlow library. That is why they only
+have one function, to turn the received descriptor into a network that contains all 
+that information.</p>
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">NetworkDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_hidden_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_probs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class implements the descriptor of a generic network. Subclasses of this are the evolved ones.
+Parameters described in this class are the ones that are in all the types of networks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_hidden_layers</strong> – Number of hidden layers in the network.</p></li>
+<li><p><strong>input_dim</strong> – Dimension of the input data (can have one or more dimensions).</p></li>
+<li><p><strong>output_dim</strong> – Expected output of the network (similarly, can have one or more dimensions).</p></li>
+<li><p><strong>init_functions</strong> – Weight initialization functions. Can have different ranges, depending on the subclass.</p></li>
+<li><p><strong>act_functions</strong> – Activation functions to be applied after each layer.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean that indicates if batch normalization is applied after each layer in the network.</p></li>
+<li><p><strong>dropout</strong> – A boolean that indicates if dropout is applied after each layer in the network.</p></li>
+<li><p><strong>dropout_probs</strong> – The different probabilities of the dropout after each layer.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the layer in the position received by parameter from the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the layer that is going to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.remove_random_layer">
+<span class="sig-name descname"><span class="pre">remove_random_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.remove_random_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects and removes a random layer from the network.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.change_activation">
+<span class="sig-name descname"><span class="pre">change_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_act_fn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.change_activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exchanges the activation function in the selected layer for a new one passed by parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer whose activation function wants to be changed.</p></li>
+<li><p><strong>new_act_fn</strong> – New activation fucntion that is going to be asigned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.change_weight_init">
+<span class="sig-name descname"><span class="pre">change_weight_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_weight_fn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.change_weight_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exchanges the weight initialization function in the selected layer for a new one passed by parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer whose activation function wants to be changed.</p></li>
+<li><p><strong>new_act_fn</strong> – New activation fucntion that is going to be asigned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.change_dropout">
+<span class="sig-name descname"><span class="pre">change_dropout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.change_dropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the dropout conditional. If dropout layers are used, quit them; otherwise, add them.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.change_dropout_prob">
+<span class="sig-name descname"><span class="pre">change_dropout_prob</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.change_dropout_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dropout probability for each layer is changed by a new random one (between 0 and 1).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.change_batch_norm">
+<span class="sig-name descname"><span class="pre">change_batch_norm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.change_batch_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the batch normalization conditional. If batch normalization is used, quit it; otherwise, add it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.NetworkDescriptor.print_components">
+<span class="sig-name descname"><span class="pre">print_components</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.NetworkDescriptor.print_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Codifies all the components of the network in a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string with all the components of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">MLPDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_hidden_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_probs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a></p>
+<p>Descriptor of a Multi Layer Perceptron, formed by hidden layers and with the possibility of
+selecting the number of neurons in each layer and including dropout and batch normalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_hidden_layers</strong> – Number of hidden layers in the network.</p></li>
+<li><p><strong>input_dim</strong> – Dimension of the input data (can have one or more dimensions).</p></li>
+<li><p><strong>output_dim</strong> – Expected output of the network (similarly, can have one or more dimensions).</p></li>
+<li><p><strong>init_functions</strong> – Weight initialization functions. Can have different ranges, depending on the subclass.</p></li>
+<li><p><strong>act_functions</strong> – Activation functions to be applied after each layer.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean that indicates if batch normalization is applied after each layer in the network.</p></li>
+<li><p><strong>dropout</strong> – A boolean that indicates if dropout is applied after each layer in the network.</p></li>
+<li><p><strong>dropout_probs</strong> – The different probabilities of the dropout after each layer.</p></li>
+<li><p><strong>dims</strong> – Number of neurons in each layer.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor.random_init">
+<span class="sig-name descname"><span class="pre">random_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor.random_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input, the output and some limits for the parametes of the 
+network, a random initialization of the object (the network descriptor) is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> – Input size of the network (it will be flattened in order to fit in the MLP).</p></li>
+<li><p><strong>output_size</strong> – Output size of the network (it will be flattened in order to fit in the MLP).</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers that can be in the network.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number fo units that can be in each recurrent layer of the network.</p></li>
+<li><p><strong>max_stride</strong> – Maximum stride possible (used as 2).</p></li>
+<li><p><strong>max_filter</strong> – Maximum filter size possible (used as 3).</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates if the networks can have dropout.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if the networks can have batch normalization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lay_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_prob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor.add_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a layer in the given position with all the characteristics indicated by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer.</p></li>
+<li><p><strong>lay_dims</strong> – Number of neurons in the layer.</p></li>
+<li><p><strong>init_function</strong> – Function for initializing the weights of the layer.</p></li>
+<li><p><strong>act_function</strong> – Activation function to be applied.</p></li>
+<li><p><strong>drop_prob</strong> – Probability of dropout.</p></li>
+<li><p><strong>batch_norm</strong> – Whether batch normalization is applied after the layer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor.remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the layer in the position received by parameter from the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the layer that is going to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor.change_layer_dimension">
+<span class="sig-name descname"><span class="pre">change_layer_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor.change_layer_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the dimension of the layer in position given by parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer that will be changed.</p></li>
+<li><p><strong>new_dim</strong> – Dimension that will be changed to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLPDescriptor.codify_components">
+<span class="sig-name descname"><span class="pre">codify_components</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLPDescriptor.codify_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Codifies all the components of the network in a list of tuples, where the 
+first element of the tuple is a description of the value that is in the 
+second element of the tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List with all the components of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">CNNDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_hidden_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a></p>
+<p>Descriptor of a Convolutional Neural Network, formed by convolutional and pooling layers and 
+with the possibility of selecting the filters and strides in each layer and including 
+batch normalization, but not including dropout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_hidden_layers</strong> – Number of hidden layers in the network.</p></li>
+<li><p><strong>input_dim</strong> – Dimension of the input data (can have one or more dimensions).</p></li>
+<li><p><strong>output_dim</strong> – Expected output of the network (similarly, can have one or more dimensions).</p></li>
+<li><p><strong>init_functions</strong> – Weight initialization functions. Can have different ranges, depending on the subclass.</p></li>
+<li><p><strong>act_functions</strong> – Activation functions to be applied after each layer.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean that indicates if batch normalization is applied after each layer in the network.</p></li>
+<li><p><strong>dropout</strong> – A boolean that indicates if dropout is applied after each layer in the network.</p></li>
+<li><p><strong>dropout_probs</strong> – The different probabilities of the dropout after each layer.</p></li>
+<li><p><strong>layers</strong> – List of indeces that reference the type of layer.</p></li>
+<li><p><strong>filters</strong> – List of filters sizes in each layer.</p></li>
+<li><p><strong>strides</strong> – List of strides sizes in each layer.</p></li>
+<li><p><strong>max_filter</strong> – Maximum size that filters can have.</p></li>
+<li><p><strong>max_stride</strong> – Maximum size that stride can have.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.random_init">
+<span class="sig-name descname"><span class="pre">random_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.random_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input, the output and some limits for the parametes of the 
+network, a random initialization of the object (the network descriptor) is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> – Input size of the network.</p></li>
+<li><p><strong>output_size</strong> – Output size of the network.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers that can be in the network.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number fo units that can be in each recurrent layer of the network.</p></li>
+<li><p><strong>max_stride</strong> – Maximum stride possible (used as 2).</p></li>
+<li><p><strong>max_filter</strong> – Maximum filter size possible (used as 3).</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates if the networks can have dropout.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if the networks can have batch normalization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lay_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.add_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a layer in the given position with all the characteristics indicated by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer.</p></li>
+<li><p><strong>lay_type</strong> – Type of operation (0, 1: pooling, 2 convolutional).</p></li>
+<li><p><strong>filter_size</strong> – Filter size.</p></li>
+<li><p><strong>stride_size</strong> – Stride size.</p></li>
+<li><p><strong>act_function</strong> – Activation function.</p></li>
+<li><p><strong>init_function</strong> – Initialization function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the layer in the position received by parameter from the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the layer that is going to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.change_filters">
+<span class="sig-name descname"><span class="pre">change_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_filter_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.change_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the filter of the layer in the position received by parameter for 
+a new filter specified with the size and channels received also by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the filter to be changed.</p></li>
+<li><p><strong>new_filter_size</strong> – Height and width of the filter (only square filters are allowed).</p></li>
+<li><p><strong>new_channel</strong> – Number of output channels.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.change_stride">
+<span class="sig-name descname"><span class="pre">change_stride</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_stride_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.change_stride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the stride of the layer in the position received by parameter 
+for a new stried specified with the data received also by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the filter to be changed.</p></li>
+<li><p><strong>new_stride_size</strong> – Stride assigned to that layer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNNDescriptor.codify_components">
+<span class="sig-name descname"><span class="pre">codify_components</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNNDescriptor.codify_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Codifies all the components of the network in a list of tuples, where the 
+first element of the tuple is a description of the value that is in the 
+second element of the tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List with all the components of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">TCNNDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_hidden_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a></p>
+<p>Descriptor of a Transposed Convolutional Neural Network, formed by transposed convolutional 
+layers and with the possibility of selecting the filters and strides in each layer and including 
+batch normalization, but not including dropout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_hidden_layers</strong> – Number of hidden layers in the network.</p></li>
+<li><p><strong>input_dim</strong> – Dimension of the input data (can have one or more dimensions).</p></li>
+<li><p><strong>output_dim</strong> – Expected output of the network (similarly, can have one or more dimensions).</p></li>
+<li><p><strong>init_functions</strong> – Weight initialization functions. Can have different ranges, depending on the subclass.</p></li>
+<li><p><strong>act_functions</strong> – Activation functions to be applied after each layer.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean that indicates if batch normalization is applied after each layer in the network.</p></li>
+<li><p><strong>dropout</strong> – A boolean that indicates if dropout is applied after each layer in the network.</p></li>
+<li><p><strong>dropout_probs</strong> – The different probabilities of the dropout after each layer.</p></li>
+<li><p><strong>filters</strong> – List of filters sizes in each layer.</p></li>
+<li><p><strong>strides</strong> – List of strides sizes in each layer.</p></li>
+<li><p><strong>max_filter</strong> – Maximum size that filters can have.</p></li>
+<li><p><strong>max_stride</strong> – Maximum size that stride can have.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.random_init">
+<span class="sig-name descname"><span class="pre">random_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.random_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input, the output and some limits for the parametes of the 
+network, a random initialization of the object (the network descriptor) is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> – Input size of the network.</p></li>
+<li><p><strong>output_size</strong> – Output size of the network.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers that can be in the network.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number fo units that can be in each recurrent layer of the network.</p></li>
+<li><p><strong>max_stride</strong> – Maximum stride possible (used as 2).</p></li>
+<li><p><strong>max_filter</strong> – Maximum filter size possible (used as 3).</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates if the networks can have dropout.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if the networks can have batch normalization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.add_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a layer in the given position with all the characteristics indicated by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer.</p></li>
+<li><p><strong>filter_size</strong> – Filter size.</p></li>
+<li><p><strong>stride_size</strong> – Stride size.</p></li>
+<li><p><strong>act_function</strong> – Activation function.</p></li>
+<li><p><strong>init_function</strong> – Initialization function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the layer in the position received by parameter from the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the layer that is going to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.change_filters">
+<span class="sig-name descname"><span class="pre">change_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_filter_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.change_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the filter of the layer in the position received by parameter for 
+a new filter specified with the size and channels received also by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the filter to be changed.</p></li>
+<li><p><strong>new_filter_size</strong> – Height and width of the filter (only square filters are allowed).</p></li>
+<li><p><strong>new_channel</strong> – Number of output channels.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.change_stride">
+<span class="sig-name descname"><span class="pre">change_stride</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_stride_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.change_stride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the stride of the layer in the position received by parameter 
+for a new stried specified with the data received also by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the stride to be changed.</p></li>
+<li><p><strong>new_stride_size</strong> – Stride assigned to that layer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNNDescriptor.codify_components">
+<span class="sig-name descname"><span class="pre">codify_components</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNNDescriptor.codify_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Codifies all the components of the network in a list of tuples, where the 
+first element of the tuple is a description of the value that is in the 
+second element of the tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List with all the components of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">RNNDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_hidden_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rnn_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units_in_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a></p>
+<p>Descriptor of a Recurrent Neural Network, formed by recurrent layers and with
+the possibility of selecting the type and number of unit in the recurrent
+layer and allowing bidirectional layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_hidden_layers</strong> – Number of hidden layers in the network.</p></li>
+<li><p><strong>input_dim</strong> – Dimension of the input data (can have one or more dimensions).</p></li>
+<li><p><strong>output_dim</strong> – Expected output of the network (similarly, can have one or more dimensions).</p></li>
+<li><p><strong>init_functions</strong> – Weight initialization functions. Can have different ranges, depending on the subclass.</p></li>
+<li><p><strong>act_functions</strong> – Activation functions to be applied after each layer.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean that indicates if batch normalization is applied after each layer in the network.</p></li>
+<li><p><strong>dropout</strong> – A boolean that indicates if dropout is applied after each layer in the network.</p></li>
+<li><p><strong>dropout_probs</strong> – The different probabilities of the dropout after each layer.</p></li>
+<li><p><strong>rnn_layers</strong> – List of the types of recurrent layers.</p></li>
+<li><p><strong>units_in_layer</strong> – List of number of units in each layer.</p></li>
+<li><p><strong>max_units</strong> – Maximum numbers of units that layers can have.</p></li>
+<li><p><strong>bidirectional</strong> – A boolean value to indicate if bidirectional layers are allowed.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.random_init">
+<span class="sig-name descname"><span class="pre">random_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.random_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input, the output and some limits for the parametes of the 
+network, a random initialization of the object (the network descriptor) is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> – Input size of the network.</p></li>
+<li><p><strong>output_size</strong> – Output size of the network.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers that can be in the network.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number fo units that can be in each recurrent layer of the network.</p></li>
+<li><p><strong>max_stride</strong> – Maximum stride possible (used as 2).</p></li>
+<li><p><strong>max_filter</strong> – Maximum filter size possible (used as 3).</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates if the networks can have dropout.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if the networks can have batch normalization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rnn_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units_in_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.add_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a layer in the given position with all the characteristics indicated by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the layer.</p></li>
+<li><p><strong>lay_params</strong> – Type of recurrent layer, how many units, etc..</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the layer in the position received by parameter from the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the layer that is going to be removed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.change_layer_type">
+<span class="sig-name descname"><span class="pre">change_layer_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.change_layer_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the type of the layer in the position received by parameter 
+for a new one selected randomly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the filter to be changed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.change_units">
+<span class="sig-name descname"><span class="pre">change_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.change_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the number of units of the layer in the position received by parameter 
+for a new number specified with the data received also by parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_pos</strong> – Position of the filter to be changed.</p></li>
+<li><p><strong>new_units</strong> – Number of units assigned to that layer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.change_bidirectional">
+<span class="sig-name descname"><span class="pre">change_bidirectional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.change_bidirectional" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the layer in the position received by parameter 
+for a bidirectional if is not already; otherwise, for a non
+bidirectional one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_pos</strong> – Position of the filter to be changed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNNDescriptor.codify_components">
+<span class="sig-name descname"><span class="pre">codify_components</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNNDescriptor.codify_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Codifies all the components of the network in a list of tuples, where the 
+first element of the tuple is a description of the value that is in the 
+second element of the tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List with all the components of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.Network">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_descriptor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class contains the TensorFlow definition of the networks (i.e., the “implementation” of the descriptors).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_descriptor</strong> – The descriptor with the information to generate this class (the network).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.MLP">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">MLP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_descriptor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.Network</span></code></a></p>
+<p>TensorFlow definition of the Multi Layer Perceptron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_descriptor</strong> – Descriptor of the MLP.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.MLP.building">
+<span class="sig-name descname"><span class="pre">building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.MLP.building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a TensorFlow layer, this functions continues adding more layers of a MLP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – A layer from TensorFlow.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The layer received from parameter with the MLP concatenated to it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.CNN">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">CNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_descriptor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.Network</span></code></a></p>
+<p>TensorFlow definition of the Convolutional Neural Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_descriptor</strong> – Descriptor of the CNN.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.CNN.building">
+<span class="sig-name descname"><span class="pre">building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.CNN.building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a TensorFlow layer, this functions continues adding more layers of a CNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – A layer from TensorFlow.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The layer received from parameter with the CNN concatenated to it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.TCNN">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">TCNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_descriptor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.Network</span></code></a></p>
+<p>TensorFlow definition of the Transposed Convolutional Neural Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_descriptor</strong> – Descriptor of the TCNN.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.TCNN.building">
+<span class="sig-name descname"><span class="pre">building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.TCNN.building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a TensorFlow layer, this functions continues adding more layers of a TCNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – A layer from TensorFlow.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The layer received from parameter with the TCNN concatenated to it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.network.RNN">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">RNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_descriptor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.network.Network" title="deatf.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.Network</span></code></a></p>
+<p>TensorFlow definition of the Recurrent Neural Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_descriptor</strong> – Descriptor of the RNN.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.network.RNN.building">
+<span class="sig-name descname"><span class="pre">building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.RNN.building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a TensorFlow layer, this functions continues adding more layers of a RNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – A layer from TensorFlow.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The layer received from parameter with the RNN concatenated to it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.network.calculate_CNN_shape">
+<span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">calculate_CNN_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strides</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_layer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.calculate_CNN_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input shape and the filters and strides that have been applied to that
+input by using convolutional and pooling layers, it return the output shape 
+in the desired layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> – Shape of the input given to the convolutional layers.</p></li>
+<li><p><strong>filters</strong> – List with the filters that convolutional and pooling layers use.</p></li>
+<li><p><strong>strides</strong> – List with the strides that convolutional and pooling layers use.</p></li>
+<li><p><strong>desired_layer</strong> – Position of the layer where the output shape is wanted (if 
+-1 is passed, it calculates until the last layer).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The output shape after applying those operations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deatf.network.calculate_TCNN_shape">
+<span class="sig-prename descclassname"><span class="pre">deatf.network.</span></span><span class="sig-name descname"><span class="pre">calculate_TCNN_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strides</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_layer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.network.calculate_TCNN_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the input shape and the filters and strides that have been applied to that
+input by using transposed convolutional layers, it return the output shape 
+in the desired layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_shape</strong> – Shape of the input given to the transposed convolutional layers.</p></li>
+<li><p><strong>filters</strong> – List with the filters that transposed convolutional layers use.</p></li>
+<li><p><strong>strides</strong> – List with the strides that transposed convolutional layers use.</p></li>
+<li><p><strong>desired_layer</strong> – Position of the layer where the output shape is wanted (if 
+-1 is passed, it calculates until the last layer).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The output shape after applying those operations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mutation.html"
+                        title="previous chapter">Mutation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples/index.html"
+                        title="next chapter">Examples</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/network.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/index.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Network</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

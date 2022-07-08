@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Mutation &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Network" href="network.html" />
+    <link rel="prev" title="Evolution" href="evolution.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="Network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="evolution.html" title="Evolution"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Mutation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-deatf.mutation">
+<span id="mutation"></span><h1>Mutation<a class="headerlink" href="#module-deatf.mutation" title="Permalink to this headline">¶</a></h1>
+<p>Mutation is a key step in the genetic algorithm. Here are defined and explained all
+the classes used to make those mutations possible. <a class="reference internal" href="#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code></a> is the main and
+generic class; then there are specific classes, one for each <a class="reference internal" href="network.html#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a>.
+These classes contains all the possible mutations that can be made in their defined functions.
+But the two steps to follow are:</p>
+<ol class="arabic simple">
+<li><p>Initialize appropiate class for the Network to evolve.</p></li>
+<li><p>Call <a class="reference internal" href="#deatf.mutation.Mutation.apply_random_mutation" title="deatf.mutation.Mutation.apply_random_mutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">Mutation.apply_random_mutation()</span></code></a> in order to apply a random possible mutation
+or <a class="reference internal" href="#deatf.mutation.Mutation.apply_mutation" title="deatf.mutation.Mutation.apply_mutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">Mutation.apply_mutation()</span></code></a> to apply an specific mutation (these functions 
+are inherited from Mutation so they can be used in other mutation classes).</p></li>
+</ol>
+<p>The mutation will be applied to the <a class="reference internal" href="network.html#deatf.network.NetworkDescriptor" title="deatf.network.NetworkDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.network.NetworkDescriptor</span></code></a> object passed
+i nthe parameter network in the initialization. The change will be made in the object, that
+is why mutation function do not return anything.</p>
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.mutation.</span></span><span class="sig-name descname"><span class="pre">Mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutation_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class implements the possible mutations that can be applied for a generic
+networks descriptors. This class contains the general mutations that could be 
+applied to any descriptor, subclases will have specific mutations for their own
+network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – List with the hyperparameters to be evolved.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if batch normalization can appear
+during evolution. Is different from the network’s one because this
+remains during all the process and the network’s one can be changed 
+or mutated.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates the same as batch normalization but 
+applied to dropout.</p></li>
+<li><p><strong>network</strong> – Network descriptor that will be mutated.</p></li>
+<li><p><strong>hyperparameters</strong> – Hyperparameters that are in the mutated network.</p></li>
+<li><p><strong>custom_mutation_list</strong> – Optinal list with the mutations that can be applied
+to the network. Is defined by the user with the mutations
+wanted, if is not defined, all possible mutations could be applied.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.apply_random_mutation">
+<span class="sig-name descname"><span class="pre">apply_random_mutation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.apply_random_mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>It selects all the available mutations for the network and after selecting
+one randomly, it applies that mutation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.apply_mutation">
+<span class="sig-name descname"><span class="pre">apply_mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.apply_mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a mutation method and a network, it applies that mutation to the 
+network if it is possible; if not it raises a ValueError. This function
+is mainly though for the case where the user define the mutation list, in
+order to ensure that all the described mutation can be done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mutation</strong> – Mutation that will be applied to the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.methods">
+<span class="sig-name descname"><span class="pre">methods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds and returns all the possible mutations for that mutation class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List with all the possible mutations that can be applied.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_weight_init">
+<span class="sig-name descname"><span class="pre">mut_weight_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_weight_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the weight initialization in a random layer for a new random 
+weight initialization function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_activation">
+<span class="sig-name descname"><span class="pre">mut_activation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the activation function in a random layer for a new random 
+activation function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_dropout">
+<span class="sig-name descname"><span class="pre">mut_dropout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_dropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the dropout boolean.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_dropout_prob">
+<span class="sig-name descname"><span class="pre">mut_dropout_prob</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_dropout_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the dropout probabilites.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_batch_norm">
+<span class="sig-name descname"><span class="pre">mut_batch_norm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_batch_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the batch normalization boolean.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.Mutation.mut_hyper">
+<span class="sig-name descname"><span class="pre">mut_hyper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.Mutation.mut_hyper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes one of the hyperparameters of the network for a new one selected
+randomly from the list of evolvable hyperparameters described in the initialization.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.mutation.MLP_Mutation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.mutation.</span></span><span class="sig-name descname"><span class="pre">MLP_Mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutation_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.MLP_Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.mutation.Mutation</span></code></a></p>
+<p>This class implements the possible mutations that can be applied 
+specialy to the MLP descriptors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – List with the hyperparameters to be evolved.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if batch normalization can appear
+during evolution. Is different from the network’s one because this
+remains during all the process and the network’s one can be changed 
+or mutated.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates the same as batch normalization but 
+applied to dropout.possible_initializations</p></li>
+<li><p><strong>network</strong> – MLP descriptor that will be mutated.</p></li>
+<li><p><strong>hyperparameters</strong> – Hyperparameters that are in the mutated network.</p></li>
+<li><p><strong>custom_mutation_list</strong> – Optinal list with the mutations that can be applied
+to the network. Is defined by the user with the mutations
+wanted, if is not defined, all possible mutations could be applied.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.MLP_Mutation.mut_add_layer">
+<span class="sig-name descname"><span class="pre">mut_add_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.MLP_Mutation.mut_add_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new dense layer is added to the MLP descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.MLP_Mutation.mut_remove_layer">
+<span class="sig-name descname"><span class="pre">mut_remove_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.MLP_Mutation.mut_remove_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a random layer from the MLP descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.MLP_Mutation.mut_dimension">
+<span class="sig-name descname"><span class="pre">mut_dimension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.MLP_Mutation.mut_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of neurons of a random layer are changed to a new random
+number of neurons from 1 to maximum number of neurons described 
+in the initialization.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.mutation.</span></span><span class="sig-name descname"><span class="pre">CNN_Mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutation_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.mutation.Mutation</span></code></a></p>
+<p>This class implements the possible mutations that can be applied 
+specialy to the CNN descriptors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – List with the hyperparameters to be evolved.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if batch normalization can appear
+during evolution. Is different from the network’s one because this
+remains during all the process and the network’s one can be changed 
+or mutated.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates the same as batch normalization but 
+applied to dropout.</p></li>
+<li><p><strong>network</strong> – CNN descriptor that will be mutated.</p></li>
+<li><p><strong>hyperparameters</strong> – Hyperparameters that are in the mutated network.</p></li>
+<li><p><strong>custom_mutation_list</strong> – Optinal list with the mutations that can be applied
+to the network. Is defined by the user with the mutations
+wanted, if is not defined, all possible mutations could be applied.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_add_conv_layer">
+<span class="sig-name descname"><span class="pre">mut_add_conv_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_add_conv_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new convolutional or pooling layer is added to the CNN descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_remove_conv_layer">
+<span class="sig-name descname"><span class="pre">mut_remove_conv_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_remove_conv_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a random layer from the CNN descriptor if it is possible (if there is only
+one layer, it can not be removed).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_stride_conv">
+<span class="sig-name descname"><span class="pre">mut_stride_conv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_stride_conv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stride of a random layer is changed to a new random
+stride from 1 to maximum stride size described 
+in the network descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_filter_conv">
+<span class="sig-name descname"><span class="pre">mut_filter_conv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_filter_conv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter of a random layer is changed to a new random
+filter with size from 2 to maximum filter size described 
+in the network descriptor and with channels from 1 to 65.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_weight_init">
+<span class="sig-name descname"><span class="pre">mut_weight_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_weight_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the weight initialization in a random layer for a new random 
+weight initialization function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.CNN_Mutation.mut_activation">
+<span class="sig-name descname"><span class="pre">mut_activation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.CNN_Mutation.mut_activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the activation function in a random layer for a new random 
+activation function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.mutation.TCNN_Mutation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.mutation.</span></span><span class="sig-name descname"><span class="pre">TCNN_Mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutation_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.TCNN_Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.mutation.Mutation</span></code></a></p>
+<p>This class implements the possible mutations that can be applied 
+specialy to the TCNN descriptors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – List with the hyperparameters to be evolved.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if batch normalization can appear
+during evolution. Is different from the network’s one because this
+remains during all the process and the network’s one can be changed 
+or mutated.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates the same as batch normalization but 
+applied to dropout.</p></li>
+<li><p><strong>network</strong> – TCNN descriptor that will be mutated.</p></li>
+<li><p><strong>hyperparameters</strong> – Hyperparameters that are in the mutated network.</p></li>
+<li><p><strong>custom_mutation_list</strong> – Optinal list with the mutations that can be applied
+to the network. Is defined by the user with the mutations
+wanted, if is not defined, all possible mutations could be applied.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.TCNN_Mutation.mut_add_deconv_layer">
+<span class="sig-name descname"><span class="pre">mut_add_deconv_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.TCNN_Mutation.mut_add_deconv_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new transposed convolutional layer is added to the TCNN descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.TCNN_Mutation.mut_remove_deconv_layer">
+<span class="sig-name descname"><span class="pre">mut_remove_deconv_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.TCNN_Mutation.mut_remove_deconv_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a random layer from the TCNN descriptor if it is possible (if there is only
+one layer, it can not be removed).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.TCNN_Mutation.mut_stride_deconv">
+<span class="sig-name descname"><span class="pre">mut_stride_deconv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.TCNN_Mutation.mut_stride_deconv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stride of a random layer is changed to a new random
+stride from 1 to maximum stride size described 
+in the network descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.TCNN_Mutation.mut_filter_deconv">
+<span class="sig-name descname"><span class="pre">mut_filter_deconv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.TCNN_Mutation.mut_filter_deconv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter of a random layer is changed to a new random
+filter with size from 2 to maximum filter size described 
+in the network descriptor and with channels from 1 to 65.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deatf.mutation.</span></span><span class="sig-name descname"><span class="pre">RNN_Mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_mutation_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#deatf.mutation.Mutation" title="deatf.mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">deatf.mutation.Mutation</span></code></a></p>
+<p>This class implements the possible mutations that can be applied 
+specialy to the RNN descriptors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypers</strong> – List with the hyperparameters to be evolved.</p></li>
+<li><p><strong>batch_norm</strong> – A boolean value that indicates if batch normalization can appear
+during evolution. Is different from the network’s one because this
+remains during all the process and the network’s one can be changed 
+or mutated.</p></li>
+<li><p><strong>dropout</strong> – A boolean value that indicates the same as batch normalization but 
+applied to dropout.</p></li>
+<li><p><strong>network</strong> – RNN descriptor that will be mutated.</p></li>
+<li><p><strong>hyperparameters</strong> – Hyperparameters that are in the mutated network.</p></li>
+<li><p><strong>custom_mutation_list</strong> – Optinal list with the mutations that can be applied
+to the network. Is defined by the user with the mutations
+wanted, if is not defined, all possible mutations could be applied.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation.mut_add_rnn_layer">
+<span class="sig-name descname"><span class="pre">mut_add_rnn_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation.mut_add_rnn_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new recurrent layer is added to the RNN descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation.mut_remove_rnn_layer">
+<span class="sig-name descname"><span class="pre">mut_remove_rnn_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation.mut_remove_rnn_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a random layer from the RNN descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation.mut_change_layer_type">
+<span class="sig-name descname"><span class="pre">mut_change_layer_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation.mut_change_layer_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of a random layer is changed to a new random type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation.mut_change_units">
+<span class="sig-name descname"><span class="pre">mut_change_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation.mut_change_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of units in a random layer is changed to a new random 
+number of units from 1 to maximum number of units described in 
+network descriptor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deatf.mutation.RNN_Mutation.mut_change_bidirectional">
+<span class="sig-name descname"><span class="pre">mut_change_bidirectional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deatf.mutation.RNN_Mutation.mut_change_bidirectional" title="Permalink to this definition">¶</a></dt>
+<dd><p>A random layer is changed to be biderctional if is not; otherwise,
+it stops beeing bidirectional.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="evolution.html"
+                        title="previous chapter">Evolution</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="network.html"
+                        title="next chapter">Network</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/mutation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="Network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="evolution.html" title="Evolution"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >DEATF</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Mutation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

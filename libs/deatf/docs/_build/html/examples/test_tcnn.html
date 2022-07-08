@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Predefined TCNN &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Predefined RNN" href="test_rnn.html" />
+    <link rel="prev" title="Predefined CNN" href="test_cnn.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test_rnn.html" title="Predefined RNN"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="test_cnn.html" title="Predefined CNN"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Predefined TCNN</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-test_tcnn">
+<span id="predefined-tcnn"></span><h1>Predefined TCNN<a class="headerlink" href="#module-test_tcnn" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="test_tcnn.test_TCNN_all_datasets">
+<span class="sig-prename descclassname"><span class="pre">test_tcnn.</span></span><span class="sig-name descname"><span class="pre">test_TCNN_all_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evol_alg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mu_plus_lambda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_tcnn.test_TCNN_all_datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the TCNN network with all the possible datasets and with the specified parameter selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_func</strong> – Evaluation function for evaluating each network.</p></li>
+<li><p><strong>batch_size</strong> – Batch size of the data during the training of the networks.</p></li>
+<li><p><strong>population</strong> – Number of individuals in the populations in the genetic algorithm.</p></li>
+<li><p><strong>generations</strong> – Number of generations that will be done in the genetic algorithm.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each network will be trained.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers allowed in the networks.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number of neurons allowed in the networks.</p></li>
+<li><p><strong>max_filter</strong> – Maximum size of the filter allowed in the networks.</p></li>
+<li><p><strong>max_stride</strong> – Maximum size of the stride allowed in the networks.</p></li>
+<li><p><strong>evol_alg</strong> – Evolving algorithm that will be used during the genetic algorithm.</p></li>
+<li><p><strong>sel</strong> – Selection method that will be used during the genetic algorithm.</p></li>
+<li><p><strong>sel_kwargs</strong> – Arguments for selection method.</p></li>
+<li><p><strong>lrate</strong> – Learning rate that will be used during training.</p></li>
+<li><p><strong>cxp</strong> – Crossover probability that will be used during the genetic algorithm.</p></li>
+<li><p><strong>mtp</strong> – Mutation probability that will be used during the genetic algorithm.</p></li>
+<li><p><strong>seed</strong> – Seed that will be used in every random method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_tcnn.test_TCNN">
+<span class="sig-prename descclassname"><span class="pre">test_tcnn.</span></span><span class="sig-name descname"><span class="pre">test_TCNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evol_alg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mu_plus_lambda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_tcnn.test_TCNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the TCNN network with the specified dataset and parameter selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> – Name of the dataset that will be used in the genetic algorithm.</p></li>
+<li><p><strong>eval_func</strong> – Evaluation function for evaluating each network.</p></li>
+<li><p><strong>batch_size</strong> – Batch size of the data during the training of the networks.</p></li>
+<li><p><strong>population</strong> – Number of individuals in the populations in the genetic algorithm.</p></li>
+<li><p><strong>generations</strong> – Number of generations that will be done in the genetic algorithm.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each network will be trained.</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layers allowed in the networks.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number of neurons allowed in the networks.</p></li>
+<li><p><strong>max_filter</strong> – Maximum size of the filter allowed in the networks.</p></li>
+<li><p><strong>max_stride</strong> – Maximum size of the stride allowed in the networks.</p></li>
+<li><p><strong>evol_alg</strong> – Evolving algorithm that will be used during the genetic algorithm.</p></li>
+<li><p><strong>sel</strong> – Selection method that will be used during the genetic algorithm.</p></li>
+<li><p><strong>sel_kwargs</strong> – Arguments for selection method.</p></li>
+<li><p><strong>lrate</strong> – Learning rate that will be used during training.</p></li>
+<li><p><strong>cxp</strong> – Crossover probability that will be used during the genetic algorithm.</p></li>
+<li><p><strong>mtp</strong> – Mutation probability that will be used during the genetic algorithm.</p></li>
+<li><p><strong>seed</strong> – Seed that will be used in every random method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The last generation, a log book (stats) and the hall of fame (the best 
+individuals found).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="test_tcnn.eval_tcnn">
+<span class="sig-prename descclassname"><span class="pre">test_tcnn.</span></span><span class="sig-name descname"><span class="pre">eval_tcnn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hypers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_tcnn.eval_tcnn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluation method for the TCNN. Noise is given to the model and mean squared
+error is used to calculate how the recostruction of the data has been done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nets</strong> – Dictionary with the networks that will be used to build the 
+final network and that represent the individuals to be 
+evaluated in the genetic algorithm.</p></li>
+<li><p><strong>train_inputs</strong> – Input data for training, this data will only be used to 
+give it to the created networks and train them.</p></li>
+<li><p><strong>train_outputs</strong> – Output data for training, it will be used to compare 
+the returned values by the networks and see their performance.</p></li>
+<li><p><strong>batch_size</strong> – Number of samples per batch are used during training process.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each network will be trained.</p></li>
+<li><p><strong>test_inputs</strong> – Input data for testing, this data will only be used to 
+give it to the created networks and test them. It can not be used during
+training in order to get a real feedback.</p></li>
+<li><p><strong>test_outputs</strong> – Output data for testing, it will be used to compare 
+the returned values by the networks and see their real performance.</p></li>
+<li><p><strong>hypers</strong> – Hyperparameters that are being evolved and used in the process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Mean squared error obtained with the test data that evaluates the true
+performance of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="test_cnn.html"
+                        title="previous chapter">Predefined CNN</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test_rnn.html"
+                        title="next chapter">Predefined RNN</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/test_tcnn.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test_rnn.html" title="Predefined RNN"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="test_cnn.html" title="Predefined CNN"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Predefined TCNN</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

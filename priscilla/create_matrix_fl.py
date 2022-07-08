@@ -24,7 +24,7 @@ if not os.path.exists(path):
   os.mkdir(path)
 
 #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-df = pd.read_csv('datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
 df.pop('type')
 df.pop('ts')
 #df.head()
@@ -84,7 +84,7 @@ for id in range(0,NUM_CLIENTS):
       
     with open(path + str(id) +'_train.csv','wb') as f:
         for line in tmp_gower_mat:
-            np.savetxt(f, line, fmt='%.2f')
+            np.savetxt(f, line, fmt='%.6f')
     
     with open(path + str(id) +'_train_labls.csv','wb') as f:
         np.savetxt(f, tmp_labels.values, fmt='%d')
@@ -100,7 +100,7 @@ for id in range(0,NUM_CLIENTS):
 
     with open(path + str(id) +'_test.csv','wb') as f:
         for line in tmp_gower_mat:
-            np.savetxt(f, line, fmt='%.2f')
+            np.savetxt(f, line, fmt='%.6f')
 
     with open(path + str(id) +'_test_labls.csv','wb') as f:
         np.savetxt(f, tmp_labels.values, fmt='%d')

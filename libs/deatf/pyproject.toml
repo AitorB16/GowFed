@@ -1,0 +1,11 @@
+[build-system]
+requires = [
+  "setuptools >= 40.9.0",
+  "wheel",
+  "numpy", 
+  "deap", 
+  "tensorflow-datasets", 
+  "scikit-learn", 
+  "pandas"
+]
+build-backend = "setuptools.build_meta"

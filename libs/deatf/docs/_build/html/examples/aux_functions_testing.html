@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Auxiliar functions for testing &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Predefined MLP" href="test_mlp.html" />
+    <link rel="prev" title="Examples" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test_mlp.html" title="Predefined MLP"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Auxiliar functions for testing</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-aux_functions_testing">
+<span id="auxiliar-functions-for-testing"></span><h1>Auxiliar functions for testing<a class="headerlink" href="#module-aux_functions_testing" title="Permalink to this headline">¶</a></h1>
+<p>In order to modularize and make easier the testing of the networks, functions
+have been generalized and grouped in this file. Many of those functions are
+for loading the datasets that are also in this library, the rest of them are
+for the testing of the networks.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.test">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evol_alg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mu_plus_lambda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_neurons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series_input_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series_label_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Responsible of load the desired dataset, prepare it to fit it into
+the models and it to them. Also it call the evolutionary process in
+order to evolve those generated models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> – String with the name of one of the available datasets.</p></li>
+<li><p><strong>descriptors</strong> – List with the descriptors that will be used in the test.</p></li>
+<li><p><strong>eval_func</strong> – Evaluation function that will be used to se the performance of the models.</p></li>
+<li><p><strong>batch_size</strong> – Batch size that will be taken form the data during training.</p></li>
+<li><p><strong>population</strong> – Number of individuals that will be evaluated in each generation 
+of the evolution algorithm.</p></li>
+<li><p><strong>generations</strong> – Number of generations that the evolution algorithm will be executed.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each model will be trained.</p></li>
+<li><p><strong>seed</strong> – Seed of the random processes.</p></li>
+<li><p><strong>lrate</strong> – Learning rate.</p></li>
+<li><p><strong>cxp</strong> – Crossover probability.</p></li>
+<li><p><strong>mtp</strong> – Mutation probability.</p></li>
+<li><p><strong>evol_alg</strong> – Evolutionary algorithm that will be used (strig or a function).</p></li>
+<li><p><strong>sel</strong> – Selection method that will be used (strig or a function).</p></li>
+<li><p><strong>max_num_layers</strong> – Maximum number of layer allowed in the initialization of the networks.</p></li>
+<li><p><strong>max_num_neurons</strong> – Maximum number of neurons in each layer allowed in the 
+initialization of the networks.</p></li>
+<li><p><strong>hyperparameters</strong> – Dictionary with the hyperparameters to be evolved.</p></li>
+<li><p><strong>is_time_series</strong> – Boolean that indicates if the processed data is a time series or not.</p></li>
+<li><p><strong>series_input_width</strong> – If is a series of data, the width that the input data will have.</p></li>
+<li><p><strong>series_label_width</strong> – If is a series of data, the width that the labels will have.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The last generation, a log book (stats) and the hall of fame (the best 
+individuals found).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.select_evaluation">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">select_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.select_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the mode of the dataset (classification or regression), the loss
+function that has to be used is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> – Mode of the dataset ‘class’ if classification and ‘regr’ if 
+regresion.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loss function that sould be used in each case.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_dataset">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_time_series</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series_input_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series_label_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>By receiving the dataset’s name is capable of loading and dividing it 
+into train, test and validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> – String with the name of one of the available datasets.</p></li>
+<li><p><strong>is_time_series</strong> – Boolean that indicates if the processed data is a time series or not.</p></li>
+<li><p><strong>series_input_width</strong> – If is a series of data, the width that the input data will have.</p></li>
+<li><p><strong>series_label_width</strong> – If is a series of data, the width that the labels will have.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Inidcated dataset separated in the following way X_train, X_test, X_val, 
+y_train, y_test, y_val, mode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_mushrooms">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_mushrooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_mushrooms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of mushrooms that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_air_quality">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_air_quality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_air_quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of air quality that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_estambul_values">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_estambul_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_estambul_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of estambul values that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_forest_fires">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_forest_fires</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_forest_fires" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of forest fires that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_forest_types">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_forest_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_forest_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of forest types that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_parkinsons">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_parkinsons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_parkinsons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the dataset of parkinsons that is inside this library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_CNN">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_CNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_CNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the desired dataset that is supposed to be in the database of TensorFlow
+and is for a CNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset_name</strong> – String with the name of one of the available datasets.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Featurees, labels and the type of problem for the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.load_csv">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">load_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removed_columns</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.load_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads data in the csv file located in the recceived direction and that follows 
+the received intructions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_directory</strong> – Directory where the desired dataset is located.</p></li>
+<li><p><strong>data_sep</strong> – Delemiter of data separator in the file.</p></li>
+<li><p><strong>decimal</strong> – The way decimal data is expressed in the file.</p></li>
+<li><p><strong>label_column</strong> – Name of the column that contains the labels.</p></li>
+<li><p><strong>removed_columns</strong> – Columns in the file that are not desired.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Features and labels of the dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aux_functions_testing.transform_to_time_series">
+<span class="sig-prename descclassname"><span class="pre">aux_functions_testing.</span></span><span class="sig-name descname"><span class="pre">transform_to_time_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_width</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aux_functions_testing.transform_to_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the received features and labels into time series with the
+desired width in each case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features</strong> – Features of the orignal data.</p></li>
+<li><p><strong>labels</strong> – Labels of the original data.</p></li>
+<li><p><strong>input_width</strong> – Desired width for the input data in the time series.</p></li>
+<li><p><strong>label_width</strong> – Desired width for the labels in the time series.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Features and labels from the original data transformed into time
+series with the desired widths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Examples</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test_mlp.html"
+                        title="next chapter">Predefined MLP</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/aux_functions_testing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test_mlp.html" title="Predefined MLP"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Examples"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Auxiliar functions for testing</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

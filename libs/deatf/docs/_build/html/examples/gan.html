@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Generative Adversarial Network &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multi-Network" href="multi.html" />
+    <link rel="prev" title="Convolutional Neural Network" href="cnn_class.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multi.html" title="Multi-Network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cnn_class.html" title="Convolutional Neural Network"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Generative Adversarial Network</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-gan">
+<span id="generative-adversarial-network"></span><h1>Generative Adversarial Network<a class="headerlink" href="#module-gan" title="Permalink to this headline">¶</a></h1>
+<p>This is a use case of DEATF where a Generative Adeversarial Network (GAN) is used.</p>
+<p>The GAN is created by using two MLP. This is an unsupervised problem where two 
+networks are used: one responsible of generating data (called generator) that 
+is similar but not equal to the input data and the other one resposible to detect 
+if the received data is real or created by the other network (called discriminator). 
+The key in GANs is the interaction between those two networks.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gan.generator_loss">
+<span class="sig-prename descclassname"><span class="pre">gan.</span></span><span class="sig-name descname"><span class="pre">generator_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fake_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gan.generator_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loss function for the generator network. This function might seem complex, 
+in order to understand it the function of crossentropy has to be explained:</p>
+<blockquote>
+<div><p>cross_entropy = -( p(x) * log(q(x)) + (1 - p(x)) * log(1 - q(x)) )</p>
+</div></blockquote>
+<p>In it p(x) is the probability of the target and q(x) is the probability of 
+the prediction. If the probability of the target p(x) is 1, the second part
+of the equation would desapear. Otherwise, if p(x) is 0, the first part
+of the equation would be the one that desapears. The loss function of the 
+generator consist in reducing the mean of -log(q(x)).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fake_out</strong> – Output of the generator model.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The mean of -log(fake_out).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gan.discriminator_loss">
+<span class="sig-prename descclassname"><span class="pre">gan.</span></span><span class="sig-name descname"><span class="pre">discriminator_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fake_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gan.discriminator_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loss function for the discriminator network. With the explanation of the 
+cross entropy from the genereator_loss function is easier to understand
+the discriminator loss function. At the end, it is:</p>
+<blockquote>
+<div><p>d_loss = -log(real_out) - log(1 - fake_out)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fake_out</strong> – Output of the generator model.</p></li>
+<li><p><strong>real_out</strong> – Real data, features given to the GAN.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>(log(real_out) + log(1 - fake_out))</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gan.eval_gan">
+<span class="sig-prename descclassname"><span class="pre">gan.</span></span><span class="sig-name descname"><span class="pre">eval_gan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">__</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">___</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">____</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gan.eval_gan" title="Permalink to this definition">¶</a></dt>
+<dd><p>This case is more complex than other examples, in it two models are used
+the generator and the discriminator. They are two separete models, but they 
+are related by their loss function. The generator is meant to create outputs 
+that are similar but not equal to the real input and the discriminator
+has to diferentiate between the reals and the generated by the generator.
+That is why their losses are linked and the train step is more complex and
+tf.function ahs to be used to determine how the training has to go on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nets</strong> – Dictionary with the networks that will be used to build the 
+final network and that represent the individuals to be 
+evaluated in the genetic algorithm.</p></li>
+<li><p><strong>train_inputs</strong> – Input data for training, this data will only be used to 
+give it to the created networks and train them.</p></li>
+<li><p><strong>train_outputs</strong> – Output data for training, it will be used to compare 
+the returned values by the networks and see their performance.</p></li>
+<li><p><strong>batch_size</strong> – Number of samples per batch are used during training process.</p></li>
+<li><p><strong>iters</strong> – Number of iterations that each network will be trained.</p></li>
+<li><p><strong>test_inputs</strong> – Input data for testing, this data will only be used to 
+give it to the created networks and test them. It can not be used during
+training in order to get a real feedback.</p></li>
+<li><p><strong>test_outputs</strong> – Output data for testing, it will be used to compare 
+the returned values by the networks and see their real performance.</p></li>
+<li><p><strong>hypers</strong> – Hyperparameters that are being evolved and used in the process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Generator’s loss function that evaluates the true
+performance of the network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cnn_class.html"
+                        title="previous chapter">Convolutional Neural Network</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="multi.html"
+                        title="next chapter">Multi-Network</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/gan.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multi.html" title="Multi-Network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cnn_class.html" title="Convolutional Neural Network"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Generative Adversarial Network</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

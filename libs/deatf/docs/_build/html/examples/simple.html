@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Multi Layer Perceptron &#8212; DEATF  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Single Skip" href="single_skip.html" />
+    <link rel="prev" title="Sequential Network" href="sequential.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="single_skip.html" title="Single Skip"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sequential.html" title="Sequential Network"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Multi Layer Perceptron</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-simple">
+<span id="multi-layer-perceptron"></span><h1>Multi Layer Perceptron<a class="headerlink" href="#module-simple" title="Permalink to this headline">¶</a></h1>
+<p>This is the simplest use case of DEATF.</p>
+<p>In this instance, we require a simple DNN, a Multi Layer Perceptron (MLP). Only restrictions
+for the evolution have to be established, like maximum number of layers or neurons in the MLP.
+As is it the simple case, no evalution function has to be used, a predifined one is used (XEntropy).
+Fashion mnist dataset is used, that is why 28x28 is the input size and 10 the output size.</p>
+<p>First of all fashion mnist dataset has to be loaded and preprocessed in order to
+pass it to the network. In that preprocessing, labels that are integers from 0 to
+9, are one hot encoded. That is, 3 turns into a vector [0,0,0,1,0,0,0,0,0,0] with
+a one in the index 3 (starting to count from 0) and the rest are zeros.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+    <span class="n">OHEnc</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
+
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">OHEnc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">OHEnc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">y_val</span> <span class="o">=</span> <span class="n">OHEnc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_val</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    
+</pre></div>
+</div>
+<p>Then is time to star the evolution. First specifying the desired parameters for evolution and then calling evolve function, evolution will be carried out.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                 <span class="n">x_trains</span><span class="o">=</span><span class="p">[</span><span class="n">x_train</span><span class="p">],</span> <span class="n">y_trains</span><span class="o">=</span><span class="p">[</span><span class="n">y_train</span><span class="p">],</span> <span class="n">x_tests</span><span class="o">=</span><span class="p">[</span><span class="n">x_val</span><span class="p">],</span> <span class="n">y_tests</span><span class="o">=</span><span class="p">[</span><span class="n">y_val</span><span class="p">],</span> 
+                 <span class="n">n_inputs</span><span class="o">=</span><span class="p">[[</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">]],</span> <span class="n">n_outputs</span><span class="o">=</span><span class="p">[[</span><span class="mi">10</span><span class="p">]],</span>
+                 <span class="n">population</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> 
+                 <span class="n">lrate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">cxp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mtp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">max_num_layers</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_num_neurons</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_filter</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_stride</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">evol_alg</span><span class="o">=</span><span class="s1">&#39;mu_plus_lambda&#39;</span><span class="p">,</span> <span class="n">sel</span><span class="o">=</span><span class="s1">&#39;tournament&#39;</span><span class="p">,</span> <span class="n">sel_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tournsize&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">},</span> 
+                 <span class="n">evol_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">batch_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">evolve</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sequential.html"
+                        title="previous chapter">Sequential Network</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="single_skip.html"
+                        title="next chapter">Single Skip</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/simple.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="single_skip.html" title="Single Skip"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sequential.html" title="Sequential Network"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">DEATF  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Multi Layer Perceptron</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Iván Hidalgo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

@@ -18,7 +18,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 import sys
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
-sys.path.append("../federated/tensorflow_federated/examples/simple_fedavg")
+sys.path.append("../libs/federated/tensorflow_federated/examples/simple_fedavg")
 import simple_fedavg_tff
 
 config_obj = configparser.ConfigParser()
@@ -74,7 +74,7 @@ with open(path + 'conf.ini', 'w') as f: #Should be XML?
 
 if not LOAD_MAT:
   #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-  df = pd.read_csv('datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+  df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
   df.pop('type')
   df.pop('ts')
   #df.head()

@@ -22,7 +22,7 @@ if not os.path.exists(path):
   os.mkdir(path)
 
 #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-df = pd.read_csv('datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
 df.pop('type')
 df.pop('ts')
 #df.head()
@@ -59,24 +59,25 @@ train_labels = train_data.pop('label')
 test_data = data.tail(TEST_SIZE)
 test_labels = test_data.pop('label')
 
-train_gower_mat = np.matrix(gd.gower_matrix_limit_cols(train_data,TEST_SIZE,cat_features=cat_index_bool))
-test_gower_mat = np.matrix(gd.sliced_gower_matrix_limit_cols(test_data,TEST_SIZE, TRAIN_SIZE,cat_features=cat_index_bool))
+#train_gower_mat = np.matrix(gd.gower_matrix_limit_cols(train_data,TRAIN_SIZE,cat_features=cat_index_bool))
+train_gower_mat = np.matrix(gd.gower_matrix(train_data, cat_features=cat_index_bool))
+test_gower_mat = np.matrix(gd.sliced_gower_matrix_limit_cols(pd.concat([train_data,test_data]),TRAIN_SIZE, TRAIN_SIZE,cat_features=cat_index_bool))
 #test_gower_mat = np.matrix(test_gower_mat[TRAIN_SIZE:,:])
 
 
-with open(path + 'train_mat.csv','wb') as f:
+with open(path + 'train.csv','wb') as f:
     for line in train_gower_mat:
-        np.savetxt(f, line, fmt='%.2f')
+        np.savetxt(f, line, fmt='%.6f')
 
-with open(path + 'train_mat_labls.csv', 'wb') as f:
-  np.savetxt(f, train_labels.values, fmt='%.2f')
+with open(path + 'train_labls.csv', 'wb') as f:
+  np.savetxt(f, train_labels.values, fmt='%d')
 
-with open(path + 'test_mat.csv','wb') as f:
-    for line in train_gower_mat:
-        np.savetxt(f, line, fmt='%.2f')
+with open(path + 'test.csv','wb') as f:
+    for line in test_gower_mat:
+        np.savetxt(f, line, fmt='%.6f')
 
-with open(path + 'test_mat_labls.csv', 'wb') as f:
-  np.savetxt(f, test_labels.values, fmt='%.2f')
+with open(path + 'test_labls.csv', 'wb') as f:
+  np.savetxt(f, test_labels.values, fmt='%d')
 
 with open(path + 'mat.ini', 'w') as f:
     out = '[MATX]\nseed = ' + str(SEED) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE)
