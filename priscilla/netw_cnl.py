@@ -31,15 +31,12 @@ LEARNING_RATE = float(init['learning_rate'])
 BALANCE_DATA = bool(int(init['balance_data']))
 SEED = int(init['seed'])
 
-LOAD_MAT = bool(int(init['load_matrix']))
-
-if LOAD_MAT:
-  config_obj1 = configparser.ConfigParser()
-  config_obj1.read(root + 'mats/cnl/' + RUN_NAME + '/mat.ini')
-  init1 = config_obj1['MATX']
-  SEED = int(init1['seed'])
-  TRAIN_SIZE = int(init1['train_size'])
-  TEST_SIZE = int(init1['test_size'])
+config_obj1 = configparser.ConfigParser()
+config_obj1.read(root + 'mats/cnl/' + RUN_NAME + '/mat.ini')
+init1 = config_obj1['MATX']
+SEED = int(init1['seed'])
+TRAIN_SIZE = int(init1['train_size'])
+TEST_SIZE = int(init1['test_size'])
 
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
@@ -55,54 +52,10 @@ CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntrain_size = ' + str(TRAIN_S
 with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
     f.write(CONFIG_STR)
 
-if not LOAD_MAT:
-  #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-  df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
-  df.pop('type')
-  df.pop('ts')
-  #df.head()
-
-  # Percentage malware
-  perc = len(df.loc[df['label']==1])/len(df)
-  #print(perc)
-
-  # Balance dataset
-  if BALANCE_DATA:
-    num_anom = len(df.loc[df['label']==1.])
-    df_anom = df.loc[df['label']==1.]
-    df_normal = df.loc[df['label']==0.]
-    df_normal = df_normal.sample(num_anom, replace=False, random_state = SEED)
-    df_concated = pd.concat([df_normal, df_anom])
-    balanced_data = df_concated
-    df = balanced_data
-
-  data = df.sample(TRAIN_SIZE+TEST_SIZE, random_state= SEED)
-
-  cat_indexs = [0, 1, 2, 3, 4, 5, 9, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39, 40, 41]
-  num_indexs = [6, 7, 8, 10, 11, 12, 13, 14, 33, 34]
-  #bool_indexs = []
-
-  # Which cols are categorical
-  cat_index_bool = [False] * 42
-  for e in cat_indexs:
-      cat_index_bool[e] = True
-
-  train_data = data.head(TRAIN_SIZE)
-  train_labels = train_data.pop('label')
-  test_data = data.tail(TEST_SIZE)
-  test_labels = test_data.pop('label')
-
-  train_gower_mat = gd.gower_matrix_limit_cols(train_data,TRAIN_SIZE,cat_features=cat_index_bool)
-  test_gower_mat = gd.sliced_gower_matrix_limit_cols(pd.concat([train_data,test_data]),TRAIN_SIZE, TRAIN_SIZE,cat_features=cat_index_bool)
-  
-  train_data = train_gower_mat
-  test_data = test_gower_mat
-
-else:
-  train_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
-  train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
-  test_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
-  test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
+train_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
+train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
+test_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
+test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
 
 def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)

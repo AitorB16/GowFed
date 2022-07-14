@@ -48,7 +48,6 @@ if BALANCE_DATA:
 
 data = df.sample(TRAIN_SIZE + TEST_SIZE, random_state = SEED)
 
-
 cat_indexs = [0, 1, 2, 3, 4, 5, 9, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39, 40, 41]
 num_indexs = [6, 7, 8, 10, 11, 12, 13, 14, 33, 34]
 #bool_indexs = []
@@ -57,7 +56,6 @@ num_indexs = [6, 7, 8, 10, 11, 12, 13, 14, 33, 34]
 cat_index_bool = [False] * 42
 for e in cat_indexs:
     cat_index_bool[e] = True
-
 
 train_data = data.head(TRAIN_SIZE)
 train_labels = train_data.pop('label')
@@ -78,8 +76,6 @@ for id in range(0,NUM_CLIENTS):
     if(tmp_len < min_client_ds_size):
         min_client_ds_size = tmp_len
 
-
-
 for id in range(0,NUM_CLIENTS):    
     tmp_features = train_data.loc[client_id_train == id]
     tmp_labels = train_labels.loc[client_id_train == id]
@@ -92,7 +88,6 @@ for id in range(0,NUM_CLIENTS):
     with open(path + str(id) +'_train_labls.csv','wb') as f:
         np.savetxt(f, tmp_labels.values, fmt='%d')
 
-    
 for id in range(0,NUM_CLIENTS):    
     train_instances = train_data.loc[client_id_train == id]
     test_instances = test_data.loc[client_id_test == id]
