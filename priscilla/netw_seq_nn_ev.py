@@ -59,14 +59,23 @@ y_train = OHEnc.fit_transform(np.reshape(y_train, (-1, 1))).toarray()
 y_test = OHEnc.fit_transform(np.reshape(y_test, (-1, 1))).toarray()
 y_val = OHEnc.fit_transform(np.reshape(y_val, (-1, 1))).toarray()
 
+#e = Evolving(evaluation="XEntropy", desc_list=[MLPDescriptor], compl=False,
+#             x_trains=[x_train], y_trains=[y_train], x_tests=[x_val], y_tests=[y_val], 
+#             n_inputs=[[TRAIN_SIZE]], n_outputs=[[2]],
+#             population=10, generations=10, batch_size=200, iters=150, 
+#             lrate=0.0001, cxp=0, mtp=1, seed=SEED,
+#             max_num_layers=10, max_num_neurons=100, max_filter=4, max_stride=3,
+#             evol_alg='mu_plus_lambda', sel='tournament', sel_kwargs={'tournsize':3}, 
+#             evol_kwargs={}, batch_norm=False, dropout=False, run_name=str(RUN_NAME))
+
 e = Evolving(evaluation="XEntropy", desc_list=[MLPDescriptor], compl=False,
              x_trains=[x_train], y_trains=[y_train], x_tests=[x_val], y_tests=[y_val], 
              n_inputs=[[TRAIN_SIZE]], n_outputs=[[2]],
              population=10, generations=10, batch_size=200, iters=150, 
              lrate=0.0001, cxp=0, mtp=1, seed=SEED,
-             max_num_layers=10, max_num_neurons=100, max_filter=4, max_stride=3,
+             max_num_layers=100, max_num_neurons=1000, max_filter=4, max_stride=3,
              evol_alg='mu_plus_lambda', sel='tournament', sel_kwargs={'tournsize':3}, 
              evol_kwargs={}, batch_norm=False, dropout=False, run_name=str(RUN_NAME))
 
 a = e.evolve()
-print(a)
+#print(a)

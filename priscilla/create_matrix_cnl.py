@@ -3,9 +3,12 @@ import pandas as pd
 import gower as gd
 import configparser
 import os
+import sys
+
+root = ''
 
 config_obj = configparser.ConfigParser()
-config_obj.read('cnl.ini')
+config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
 
 init = config_obj['SETUP']
 
@@ -17,12 +20,12 @@ RUN_NAME = init['run_name']
 
 np.random.seed(SEED)
 
-path = 'mats/cnl/' + RUN_NAME + '/'
+path = root + 'mats/cnl/' + RUN_NAME + '/'
 if not os.path.exists(path):
   os.mkdir(path)
 
 #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
 df.pop('type')
 df.pop('ts')
 #df.head()

@@ -3,9 +3,12 @@ import pandas as pd
 import gower as gd
 import configparser
 import os
+import sys
+
+root = ''
 
 config_obj = configparser.ConfigParser()
-config_obj.read('fl.ini')
+config_obj.read(root + 'fl' + sys.argv[1] + '.ini')
 
 init = config_obj['SETUP']
 
@@ -14,17 +17,17 @@ TEST_SIZE = int(init['test_size'])
 BALANCE_DATA = bool(int(init['balance_data']))
 SEED = int(init['seed'])
 NUM_CLIENTS = int(init['num_clients'])
-RUN_NAME = init['run_name']
+RUN_NAME = 'F' + sys.argv[1] #init['run_name']
 
 np.random.seed(SEED)
 
 
-path = 'mats/fl/' + RUN_NAME + '/'
+path = root + 'mats/fl/' + RUN_NAME + '/'
 if not os.path.exists(path):
   os.mkdir(path)
 
 #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
 df.pop('type')
 df.pop('ts')
 #df.head()

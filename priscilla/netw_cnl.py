@@ -11,15 +11,17 @@ import os
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-#import sys
+import sys
 #sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
 #import simple_fedavg_tff
 
+root = ''
+
 config_obj = configparser.ConfigParser()
-config_obj.read('cnl.ini')
+config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
 
 init = config_obj['SETUP']
-RUN_NAME = init['run_name']
+RUN_NAME = 'C' + sys.argv[1] #init['run_name']
 PRINT_SCR = bool(int(init['print_scr']))
 TRAIN_SIZE = int(init['train_size'])
 TEST_SIZE = int(init['test_size'])
@@ -33,7 +35,7 @@ LOAD_MAT = bool(int(init['load_matrix']))
 
 if LOAD_MAT:
   config_obj1 = configparser.ConfigParser()
-  config_obj1.read('mats/cnl/' + RUN_NAME + '/mat.ini')
+  config_obj1.read(root + 'mats/cnl/' + RUN_NAME + '/mat.ini')
   init1 = config_obj1['MATX']
   SEED = int(init1['seed'])
   TRAIN_SIZE = int(init1['train_size'])
@@ -43,19 +45,19 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 #path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
-path = 'results/cnl/' + RUN_NAME + '/'
-if not os.path.exists(path):
-  os.mkdir(path)
+result_path = root + 'results/cnl/' + RUN_NAME + '/'
+if not os.path.exists(result_path):
+  os.mkdir(result_path)
 
 
 #Save cofiguration
 CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nepochs = ' + str(EPOCHS) + '\nbatch_size = ' + str(BATCH_SIZE) + '\nlearning_rate = ' + str(LEARNING_RATE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\nseed = ' + str(SEED) + '\n'
-with open(path + 'conf.ini', 'w') as f: #Should be XML?
+with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
     f.write(CONFIG_STR)
 
 if not LOAD_MAT:
   #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-  df = pd.read_csv('../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+  df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
   df.pop('type')
   df.pop('ts')
   #df.head()
@@ -97,10 +99,10 @@ if not LOAD_MAT:
   test_data = test_gower_mat
 
 else:
-  train_data = np.array(pd.read_csv('mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
-  train_labels = pd.read_csv('mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
-  test_data = np.array(pd.read_csv('mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
-  test_labels = pd.read_csv('mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
+  train_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
+  train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
+  test_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
+  test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
 
 def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)
@@ -174,7 +176,7 @@ out = save_stats(np.round(preds, decimals=0), test_labels.astype(int), PRINT_SCR
 
 # save model
 #model.save('/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.h5')
-model.save(path + 'model.h5')
+model.save(result_path + 'model.h5')
 
 
 # Save result
@@ -187,13 +189,13 @@ for e in history.history["loss"]:
 for e in history.history["val_loss"]:
   val_loss = val_loss + str(e) + ' '
 
-with open(path + 'stats.txt', 'w') as f:
+with open(result_path + 'stats.txt', 'w') as f:
   f.write(out + " \n")
 
-with open(path + 'tr_loss.txt', 'w') as f:
+with open(result_path + 'tr_loss.txt', 'w') as f:
   f.write(tr_loss + "\n")
 
-with open(path + 'val_loss.txt', 'w') as f:
+with open(result_path + 'val_loss.txt', 'w') as f:
   f.write(val_loss + "\n")
 
 #first_layer_weights = model.layers[0].get_weights()[0]
