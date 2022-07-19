@@ -36,6 +36,7 @@ SERVER_LEARNING_RATE = float(init['server_learning_rate'])
 CLIENT_LEARNING_RATE = float(init['client_learning_rate'])
 
 PRINT_SCR = bool(int(init['print_scr']))
+OUTLIERS = init['outliers']
 BALANCE_DATA = bool(int(init['balance_data']))
 
 NUM_CLIENTS = int(init['num_clients'])
@@ -63,7 +64,7 @@ if not os.path.exists(result_path):
   os.mkdir(result_path)
 
 #Save cofiguration
-CONFIG_STR = '[SETUP]\n --AE version-- \nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\nseed = ' + str(SEED) + '\n'
+CONFIG_STR = '[SETUP]\n --AE version-- \nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) +'\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
 with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
   f.write(CONFIG_STR)
 
@@ -281,14 +282,12 @@ for i in range(0, NUM_CLIENTS):
   df_cl = df_cl.iloc[:,:min_client_ds_size]
 
   normal_test_features = df_cl[tmp_labels == 0]
-  #tensor_normal_test_features = tf.convert_to_tensor(normal_test_features, dtype=tf.float32)
   reconstruct_normal = keras_model(np.array(normal_test_features))
   normal_test_loss = tf.keras.losses.mae(y_true=normal_test_features, y_pred=reconstruct_normal)
 
-  anomal_test_features = df_cl[tmp_labels == 1]
-  #tensor_anomal_test_features = tf.convert_to_tensor(anomal_test_features, dtype=tf.float32)
-  reconstruct_anomal = keras_model(np.array(anomal_test_features))
-  anomal_test_loss = tf.keras.losses.mae(y_true=anomal_test_features, y_pred=reconstruct_anomal)
+  # anomal_test_features = df_cl[tmp_labels == 1]
+  # reconstruct_anomal = keras_model(np.array(anomal_test_features))
+  # anomal_test_loss = tf.keras.losses.mae(y_true=anomal_test_features, y_pred=reconstruct_anomal)
 
   threshold.append(np.mean(normal_test_loss) + np.std(normal_test_loss))
 

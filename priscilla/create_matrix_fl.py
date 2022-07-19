@@ -18,6 +18,7 @@ BALANCE_DATA = bool(int(init['balance_data']))
 SEED = int(init['seed'])
 NUM_CLIENTS = int(init['num_clients'])
 RUN_NAME = 'F' + sys.argv[1] #init['run_name']
+OUTLIERS = init['outliers']
 
 np.random.seed(SEED)
 
@@ -26,10 +27,19 @@ path = root + 'mats/fl/' + RUN_NAME + '/'
 if not os.path.exists(path):
   os.mkdir(path)
 
-#df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
-df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+if OUTLIERS == 'isoltion_forest':
+    df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/isol_forest_prep.csv')
+    df = df.iloc[:, 1:]
+elif OUTLIERS == 'svm_one_class_classifction':
+    df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/svm_svm_one_class_prep.csv')
+    df = df.iloc[:, 1:]
+else:
+    #df = pd.read_csv("/home/abelenguer/scratch/projects/FL/TF/datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv")
+    df = pd.read_csv(root + '../datasets/TON_IoT-Datasets/Train_Test_datasets/Train_Test_Network_dataset/Train_Test_Network.csv')
+
 df.pop('type')
 df.pop('ts')
+
 #df.head()
 
 # Percentage malware

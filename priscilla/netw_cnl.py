@@ -29,6 +29,7 @@ EPOCHS = int(init['epochs'])
 BATCH_SIZE = int(init['batch_size'])
 LEARNING_RATE = float(init['learning_rate'])
 BALANCE_DATA = bool(int(init['balance_data']))
+OUTLIERS = init['outliers']
 SEED = int(init['seed'])
 
 config_obj1 = configparser.ConfigParser()
@@ -48,7 +49,7 @@ if not os.path.exists(result_path):
 
 
 #Save cofiguration
-CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nepochs = ' + str(EPOCHS) + '\nbatch_size = ' + str(BATCH_SIZE) + '\nlearning_rate = ' + str(LEARNING_RATE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\nseed = ' + str(SEED) + '\n'
+CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nepochs = ' + str(EPOCHS) + '\nbatch_size = ' + str(BATCH_SIZE) + '\nlearning_rate = ' + str(LEARNING_RATE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
 with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
     f.write(CONFIG_STR)
 
