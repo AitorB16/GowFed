@@ -15,7 +15,15 @@ import sys
 #sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
 #import simple_fedavg_tff
 
-root = ''
+#config = tf.compat.v1.ConfigProto(gpu_options = 
+#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
+## device_count = {'GPU': 1}
+#)
+#config.gpu_options.allow_growth = True
+#session = tf.compat.v1.Session(config=config)
+#tf.compat.v1.keras.backend.set_session(session)
+
+root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
@@ -62,16 +70,16 @@ def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)
   return tf.keras.models.Sequential([
       tf.keras.layers.Input(shape=(TRAIN_SIZE,)),
-      tf.keras.layers.Dense(1024, activation="relu", kernel_initializer=initializer),
-      tf.keras.layers.Dense(512, activation="relu", kernel_initializer=initializer),
-      tf.keras.layers.Dense(256, activation="relu", kernel_initializer=initializer),
-      tf.keras.layers.Dense(256, activation="relu", kernel_initializer=initializer),
-      #tf.keras.layers.Dense(256, activation="relu"),
-      #tf.keras.layers.Dense(256, activation="relu"),
-      #tf.keras.layers.Dense(256, activation="relu"),
-      tf.keras.layers.Dropout(0.2),
-      #tf.keras.layers.Dense(256, activation="relu"),
       tf.keras.layers.Dense(128, activation="relu", kernel_initializer=initializer),
+      tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
+      tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
+      tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
+      #tf.keras.layers.Dense(256, activation="relu"),
+      #tf.keras.layers.Dense(256, activation="relu"),
+      #tf.keras.layers.Dense(256, activation="relu"),
+      tf.keras.layers.Dropout(0.15),
+      #tf.keras.layers.Dense(256, activation="relu"),
+      tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
       tf.keras.layers.Dense(2, activation="relu", kernel_initializer=initializer),
       #tf.keras.layers.Dense(2, activation="relu"),
       #tf.keras.layers.Dense(32, activation="relu"),

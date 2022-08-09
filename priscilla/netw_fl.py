@@ -11,14 +11,46 @@ import collections
 #nest_asyncio.apply()
 
 import configparser
-import gower as gd
+#import gower as gd
 import os
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 import sys
 
-root = ''
+#import sys, os
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
+
+#config = tf.compat.v1.ConfigProto(gpu_options = 
+#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
+#                         device_count = {'GPU': 1}
+#)
+#config.gpu_options.allow_growth = True
+#session = tf.compat.v1.Session(config=config)
+#tf.compat.v1.keras.backend.set_session(session)
+
+#gpu_devices = tf.config.list_physical_devices('GPU')
+#tf.config.set_logical_device_configuration(
+#    gpu_devices[0], 
+#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
+#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
+#tf.config.set_logical_device_configuration(
+#    gpu_devices[1], 
+#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
+#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
+
+
+#config = tf.compat.v1.ConfigProto(gpu_options = 
+#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
+#                         device_count = {'GPU': 1})
+#print(tf.config.list_logical_devices())
+
+#config.gpu_options.allow_growth = True
+#session = tf.compat.v1.Session(config=config)
+#tf.compat.v1.keras.backend.set_session(session)
+
+root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")
@@ -43,10 +75,10 @@ PRINT_SCR = bool(int(init['print_scr']))
 OUTLIERS = init['outliers']
 BALANCE_DATA = bool(int(init['balance_data']))
 
-NUM_CLIENTS = int(init['num_clients'])
-SEED = int(init['seed'])
-TRAIN_SIZE = int(init['train_size'])
-TEST_SIZE = int(init['test_size'])
+# NUM_CLIENTS = int(init['num_clients'])
+# SEED = int(init['seed'])
+# TRAIN_SIZE = int(init['train_size'])
+# TEST_SIZE = int(init['test_size'])
 
 config_obj1 = configparser.ConfigParser()
 config_obj1.read(root + 'mats/fl/' + RUN_NAME + '/mat.ini')
@@ -192,6 +224,7 @@ def client_optimizer_fn():
 
 train_loss_list = []
 val_loss_list = []
+
 
 client_devices = tf.config.list_logical_devices('GPU')
 server_device = tf.config.list_logical_devices('CPU')[0]

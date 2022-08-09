@@ -1,3 +1,5 @@
+import collections
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -7,14 +9,14 @@ import tensorflow_federated as tff
 import collections
 
 import configparser
-import gower as gd
 import os
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 import sys
 
-root = ''
+#root = ''
+root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")
@@ -39,10 +41,10 @@ PRINT_SCR = bool(int(init['print_scr']))
 OUTLIERS = init['outliers']
 BALANCE_DATA = bool(int(init['balance_data']))
 
-NUM_CLIENTS = int(init['num_clients'])
-SEED = int(init['seed'])
-TRAIN_SIZE = int(init['train_size'])
-TEST_SIZE = int(init['test_size'])
+# NUM_CLIENTS = int(init['num_clients'])
+# SEED = int(init['seed'])
+# TRAIN_SIZE = int(init['train_size'])
+# TEST_SIZE = int(init['test_size'])
 
 config_obj1 = configparser.ConfigParser()
 config_obj1.read(root + 'mats/fl/' + RUN_NAME + '/mat.ini')
@@ -58,7 +60,7 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 #path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
-result_path = root + 'results/fl/' + RUN_NAME + '/'
+result_path = root + 'results/fl_AE/' + RUN_NAME + '/'
 
 if not os.path.exists(result_path):
   os.mkdir(result_path)
@@ -165,6 +167,7 @@ def create_fedavg_model(only_digits=True):
   initializer = tf.keras.initializers.GlorotNormal(seed=SEED)
   return tf.keras.models.Sequential([
     tf.keras.layers.Input(shape=(min_client_ds_size,)),
+    tf.keras.layers.Dense(128, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(16, activation="relu", kernel_initializer=initializer),
@@ -173,6 +176,7 @@ def create_fedavg_model(only_digits=True):
     tf.keras.layers.Dense(16, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
+    tf.keras.layers.Dense(128, activation="relu", kernel_initializer=initializer),
     tf.keras.layers.Dense(min_client_ds_size, activation="sigmoid", kernel_initializer=initializer)])
 
 

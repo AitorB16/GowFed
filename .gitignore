@@ -1,7 +1,8 @@
 datasets
 priscilla/mats/cnl/*
 priscilla/mats/fl/*
-priscilla/results/cnl/*
-priscilla/results/fl/*
+#priscilla/results/cnl/*
+#priscilla/results/fl/*
 priscilla/NNs/*
 __pycache__
+gpus.py

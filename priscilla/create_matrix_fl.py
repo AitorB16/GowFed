@@ -5,7 +5,9 @@ import configparser
 import os
 import sys
 
-root = ''
+root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+
+#sys.path.append("/home/cali/Escritorio/FL-IDS/libs")
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'fl' + sys.argv[1] + '.ini')
