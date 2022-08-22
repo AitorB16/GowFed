@@ -1,5 +1,3 @@
-import collections
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -8,14 +6,50 @@ import tensorflow_federated as tff
 
 import collections
 
+#from absl import app
+#import nest_asyncio
+#nest_asyncio.apply()
+
 import configparser
+#import gower as gd
 import os
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 import sys
 
-#root = ''
+#import sys, os
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
+
+#config = tf.compat.v1.ConfigProto(gpu_options = 
+#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
+#                         device_count = {'GPU': 1}
+#)
+#config.gpu_options.allow_growth = True
+#session = tf.compat.v1.Session(config=config)
+#tf.compat.v1.keras.backend.set_session(session)
+
+#gpu_devices = tf.config.list_physical_devices('GPU')
+#tf.config.set_logical_device_configuration(
+#    gpu_devices[0], 
+#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
+#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
+#tf.config.set_logical_device_configuration(
+#    gpu_devices[1], 
+#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
+#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
+
+
+#config = tf.compat.v1.ConfigProto(gpu_options = 
+#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
+#                         device_count = {'GPU': 1})
+#print(tf.config.list_logical_devices())
+
+#config.gpu_options.allow_growth = True
+#session = tf.compat.v1.Session(config=config)
+#tf.compat.v1.keras.backend.set_session(session)
+
 root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
@@ -24,6 +58,8 @@ import simple_fedavg_tff
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'fl' + sys.argv[1] + '.ini')
+
+BEST_PERC = 0.5
 
 # Training hyperparameters
 init = config_obj['SETUP']
@@ -56,61 +92,50 @@ TEST_SIZE = int(init1['total_test_size'])
 min_client_ds_size = int(init1['min_ds_client'])
 max_client_ds_size = int(init1['max_ds_client'])
 
+#PERCENT_TOLER = 0.5
+#min_client_ds_size = 1500
+
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 #path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
-result_path = root + 'results/fl_AE/' + RUN_NAME + '/'
+result_path = root + 'results/fl_AM/' + RUN_NAME + '/'
 
 if not os.path.exists(result_path):
   os.mkdir(result_path)
 
 #Save cofiguration
-CONFIG_STR = '[SETUP]\n--AE version-- \nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) +'\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
+CONFIG_STR = '[SETUP]\n--AM version-- \nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
 with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
   f.write(CONFIG_STR)
 
 #TRAIN: Create a dict where keys are client ids format for tff.simulation.datasets.TestClientData
-# Create distance matrix with each client data min_client_ds_size rows 
-max_client_ds_size = -1
-min_client_ds_size = sys.maxsize
+# Create distance matrix with each client data min_client_ds_size rows
 train_cl_dict = {}
 for id in range(0,NUM_CLIENTS):
   #tmp_train_df = pd.DataFrame()
   tmp_train_df = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_train.csv', sep='\s+', header=None)
   tmp_train_df.columns = tmp_train_df.columns.astype(str)
   tmp_train_df['label'] = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_train_labls.csv', header=None).values
-  tmp_train_df_normal = tmp_train_df[tmp_train_df['label'].values == 0]
   tmp_train_dict = {name: np.array(value) 
-    for name, value in tmp_train_df_normal.items()}
+    for name, value in tmp_train_df.items()}
   train_cl_dict[str(id)]=tmp_train_dict.copy()
-  
-  if len(tmp_train_df_normal) < min_client_ds_size:
-    min_client_ds_size = len(tmp_train_df_normal)
-  if len(tmp_train_df_normal) > max_client_ds_size:
-    max_client_ds_size = len(tmp_train_df_normal)
-
 #TEST SPLITED
 test_cl_dict = {}
-val_cl_dict = {}
 for id in range(0,NUM_CLIENTS):
   tmp_test_df = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_test.csv', sep='\s+', header=None)
   tmp_test_df.columns = tmp_test_df.columns.astype(str)
   tmp_test_df['label'] = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_test_labls.csv', header=None).values
-  tmp_val_df_normal = tmp_test_df[tmp_test_df['label'].values == 0]
   tmp_test_dict = {name: np.array(value)
     for name, value in tmp_test_df.items()}
   test_cl_dict[str(id)]=tmp_test_dict.copy()
-  tmp_val_dict = {name: np.array(value)
-    for name, value in tmp_val_df_normal.items()}
-  val_cl_dict[str(id)]=tmp_val_dict.copy()
 
 #CONVERT TO TFF DATASET
 #netw_ds = tf.data.Dataset.from_tensor_slices((netw_features_dict, netw_labels))
 #netw_ds = tf.data.Dataset.from_tensor_slices(netw_features_dict)
-train_fd_ds = tff.simulation.datasets.TestClientData(train_cl_dict) #normal traf
-test_fd_ds = tff.simulation.datasets.TestClientData(test_cl_dict) # mix traf
-val_fd_ds = tff.simulation.datasets.TestClientData(val_cl_dict) #normal traf
+train_fd_ds = tff.simulation.datasets.TestClientData(train_cl_dict)
+test_fd_ds = tff.simulation.datasets.TestClientData(test_cl_dict)
+
 
 def evaluate(keras_model, test_dataset):
   """Evaluate the acurracy of a keras model on a test dataset."""
@@ -125,13 +150,13 @@ def evaluate(keras_model, test_dataset):
 def get_custom_dataset():
   def element_fn(element):
     tmp_features = []
-    for i in range(0, min_client_ds_size):
+    for i in range(0,min_client_ds_size):
       tmp_features.append(element[str(i)])
     features = tf.convert_to_tensor(tmp_features, dtype=tf.float32)
     
     return collections.OrderedDict(
       # tf.expand_dims? ADD MORE COLUMNS
-        x=features, y=features)
+        x=features, y=element['label'])
 
   def preprocess_train_dataset(dataset):
     # Use buffer_size same as the maximum client dataset size,
@@ -146,11 +171,10 @@ def get_custom_dataset():
   
   netw_train = train_fd_ds.preprocess(preprocess_train_dataset)
   
-  netw_val = preprocess_test_dataset(
-    val_fd_ds.create_tf_dataset_from_all_clients())
-    #test_fd_ds.create_tf_dataset_from_all_clients())
+  netw_test = preprocess_test_dataset(
+    test_fd_ds.create_tf_dataset_from_all_clients())
   
-  return netw_train, netw_val
+  return netw_train, netw_test
 
 
 def create_fedavg_model(only_digits=True):
@@ -167,17 +191,23 @@ def create_fedavg_model(only_digits=True):
   initializer = tf.keras.initializers.GlorotNormal(seed=SEED)
   return tf.keras.models.Sequential([
     tf.keras.layers.Input(shape=(min_client_ds_size,)),
+    tf.keras.layers.Dense(1024, activation="relu", kernel_initializer=initializer),
+    tf.keras.layers.Dense(512, activation="relu", kernel_initializer=initializer),
+    tf.keras.layers.Dense(256, activation="relu", kernel_initializer=initializer),
+    tf.keras.layers.Dense(256, activation="relu", kernel_initializer=initializer),
+    #tf.keras.layers.Dense(256, activation="relu"),
+    #tf.keras.layers.Dense(256, activation="relu"),
+    #tf.keras.layers.Dense(256, activation="relu"),
+    tf.keras.layers.Dropout(0.2),
+    #tf.keras.layers.Dense(256, activation="relu"),
     tf.keras.layers.Dense(128, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(16, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dropout(0.1),
-    tf.keras.layers.Dense(8, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(16, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(32, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(64, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(128, activation="relu", kernel_initializer=initializer),
-    tf.keras.layers.Dense(min_client_ds_size, activation="sigmoid", kernel_initializer=initializer)])
+    tf.keras.layers.Dense(2, activation="relu", kernel_initializer=initializer),
+    #tf.keras.layers.Dense(2, activation="relu"),
+    #tf.keras.layers.Dense(32, activation="relu"),
+    #tf.keras.layers.Dense(4, activation="relu"),
+    tf.keras.layers.Dense(1, activation="sigmoid", kernel_initializer=initializer)
+    #tf.keras.layers.Softmax()
+    ])
 
 
 def server_optimizer_fn():
@@ -200,6 +230,7 @@ def client_optimizer_fn():
 train_loss_list = []
 val_loss_list = []
 
+
 client_devices = tf.config.list_logical_devices('GPU')
 server_device = tf.config.list_logical_devices('CPU')[0]
 tff.backends.native.set_local_python_execution_context(
@@ -209,11 +240,12 @@ def tff_model_fn():
   """Constructs a fully initialized model for use in federated averaging."""
   keras_model = create_fedavg_model(only_digits=True)
   loss = [tf.keras.losses.BinaryCrossentropy()]
-  #metrics = [tf.keras.metrics.sparse_categorical_crossentropy()]
+  #loss = tf.keras.losses.BinaryCrossentropy()
+  metrics = [tf.keras.metrics.BinaryAccuracy()]
   return tff.learning.from_keras_model(
       keras_model,
       loss=loss,
-      #metrics=metrics,
+      metrics=metrics,
       input_spec=train_data.element_type_structure)
 
 iterative_process = simple_fedavg_tff.build_federated_averaging_process(
@@ -221,20 +253,47 @@ iterative_process = simple_fedavg_tff.build_federated_averaging_process(
 server_state = iterative_process.initialize()
 # Keras model that represents the global model we'll evaluate test data on.
 keras_model = create_fedavg_model(only_digits=True)
+#G = [0.0, 0.0]
+
 for round_num in range(TOTAL_ROUNDS):
-    sampled_clients = np.random.choice(
-        train_data.client_ids,
-        size=TRAIN_CLIENTS_PER_ROUND,
-        replace=False)
-    sampled_train_data = [
-        train_data.create_tf_dataset_for_client(client)
-        for client in sampled_clients
-    ]
-    server_state, train_metrics = iterative_process.next(
-        server_state, sampled_train_data)
-    if PRINT_SCR:  
-      print(f'Round {round_num}')
-      print(f'\tTraining metrics: {train_metrics}')
+  cli_metrics_round = []
+  #simple_fedavg_tff.test()
+  sampled_clients = np.random.choice(
+      train_data.client_ids,
+      size=TRAIN_CLIENTS_PER_ROUND,
+      replace=False)
+  sampled_train_data = [
+      train_data.create_tf_dataset_for_client(client)
+      for client in sampled_clients
+  ]
+
+
+  cli_metrics, cli_weights = iterative_process.next1(server_state, sampled_train_data)
+  
+  for cli in cli_metrics:
+    cli_metrics_round.append(cli.get('binary_accuracy')[0]/cli.get('binary_accuracy')[1])
+
+  best_vals = sorted(cli_metrics_round)[int(-TRAIN_CLIENTS_PER_ROUND*BEST_PERC):]
+
+  w_indx = []
+  for e in cli_metrics_round:
+    if e in best_vals:
+      w_indx.append(1.0)
+    else:
+      w_indx.append(0.0)
+  
+  print('\n')
+  print(cli_metrics_round)
+  print('\n')
+  print(w_indx)
+  print('\n')
+
+  server_state, train_metrics = iterative_process.next2(server_state, sampled_train_data, cli_weights * w_indx)
+
+
+  if PRINT_SCR:  
+    print(f'Round {round_num}')
+    print(f'\tTraining metrics: {train_metrics}')
     train_loss_list.append(train_metrics.get('loss'))   
     if round_num % ROUNDS_PER_EVAL == 0:
       server_state.model.assign_weights_to(keras_model)
@@ -243,10 +302,9 @@ for round_num in range(TOTAL_ROUNDS):
       if PRINT_SCR:
           print(f'\tValidation loss: {val_loss: .7f}')
 
-def predict(model, data, threshold):
+def predict(model, data):
   reconstructions = model(data)
-  loss = tf.keras.losses.mean_squared_error(reconstructions, data)
-  return np.array((tf.math.less(loss, threshold))).astype(int)
+  return reconstructions
 
 def get_accuracy_list(dict):
   acc_list = []
@@ -275,40 +333,25 @@ def save_stats(predictions, labels, print_scr=False):
 
   return (acc + " " + prec + " " + rcl + " " + f1 + " " + roc)
 
-# Save result in txt
+
+  # Save result in txt
 with open(result_path + 'stats.txt', 'w') as f:
     f.write('CL_ID TRAIN_DS_SIZE ACC PREC RCL F1 ROC \n')
 
-threshold = []
 for i in range(0, NUM_CLIENTS):
-  df_cl = pd.DataFrame.from_dict(test_cl_dict[str(i)]).copy()
-  tmp_labels = df_cl.pop('label')
-  df_cl = df_cl.iloc[:,:min_client_ds_size]
+    test = pd.DataFrame.from_dict(test_cl_dict[str(i)]).copy()
+    labs = test.pop('label')
+    preds = predict(keras_model, np.array(test))
+    results = save_stats(np.round(preds, decimals=0), labs.astype(int), PRINT_SCR)
+    out = str(i) + ' ' + str(len(train_cl_dict[str(i)]['label'])) + ' ' + results
+    with open(result_path + 'stats.txt', 'a') as f:
+        f.write(out + " \n")
 
-  normal_test_features = df_cl[tmp_labels == 0]
-  reconstruct_normal = keras_model(np.array(normal_test_features))
-  normal_test_loss = tf.keras.losses.mae(y_true=normal_test_features, y_pred=reconstruct_normal)
-
-  # anomal_test_features = df_cl[tmp_labels == 1]
-  # reconstruct_anomal = keras_model(np.array(anomal_test_features))
-  # anomal_test_loss = tf.keras.losses.mae(y_true=anomal_test_features, y_pred=reconstruct_anomal)
-
-  threshold.append(np.mean(normal_test_loss) + np.std(normal_test_loss))
-
-  if PRINT_SCR:
-    print(threshold[i])
-  
-  preds = predict(keras_model, np.array(df_cl), threshold[i])
-  results = save_stats(np.round(preds, decimals=0), tmp_labels.astype(int), PRINT_SCR)
-  out = str(i) + ' ' + str(len(train_cl_dict[str(i)]['label'])) + ' ' + results
-  with open(result_path + 'stats.txt', 'a') as f:
-    f.write(out + " \n")
-  
 # save model
 keras_model.save(result_path + 'model.h5')
 #model = tf.keras.models.load_model("./experiments/e3.h5")
 
-# Save results
+# Save result
 tr_loss = ''
 val_loss = ''
 

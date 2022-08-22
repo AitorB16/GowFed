@@ -257,6 +257,7 @@ for round_num in range(TOTAL_ROUNDS):
         train_data.create_tf_dataset_for_client(client)
         for client in sampled_clients
     ]
+
     server_state, train_metrics = iterative_process.next(
         server_state, sampled_train_data)
     if PRINT_SCR:  
