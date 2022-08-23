@@ -134,6 +134,7 @@ def build_server_broadcast_message(server_state):
 
 @tf.function
 def client_update(model, dataset, server_message, client_optimizer):
+
   """Performans client local training of `model` on `dataset`.
 
   Args:
@@ -147,6 +148,7 @@ def client_update(model, dataset, server_message, client_optimizer):
   Returns:
     A `ClientOutput` instance with a model update to aggregate on the server.
   """
+
   model_weights = tff.learning.ModelWeights.from_model(model)
   initial_weights = server_message.model_weights
   tf.nest.map_structure(lambda v, t: v.assign(t), model_weights,
@@ -168,6 +170,8 @@ def client_update(model, dataset, server_message, client_optimizer):
   weights_delta = tf.nest.map_structure(lambda a, b: a - b,
                                         model_weights.trainable,
                                         initial_weights.trainable)
+
   client_weight = tf.cast(num_examples, tf.float32)
   model_outputs = model.report_local_unfinalized_metrics()
+
   return ClientOutput(weights_delta, client_weight, model_outputs)

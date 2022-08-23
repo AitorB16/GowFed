@@ -9,3 +9,7 @@ https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/Cli
 https://www.tensorflow.org/federated/api_docs/python/tff/experimental
 
 https://www.tensorflow.org/federated/api_docs/python/tff/simulation/datasets/TestClientData
+
+https://www.tensorflow.org/federated/api_docs/python/tff/types/FederatedType
+
+https://colab.research.google.com/github/tensorflow/federated/blob/v0.4.0/docs/tutorials/custom_federated_algorithms_1.ipynb#scrollTo=_W2tBQxz2wmV

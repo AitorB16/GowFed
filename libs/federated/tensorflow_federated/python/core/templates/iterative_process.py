@@ -138,32 +138,32 @@ class IterativeProcess:
         `initialize_fn` or `next_fn` is not assignable to the first input
         argument of `next_fn`.
     """
-    py_typecheck.check_type(initialize_fn, computation_base.Computation)
-    if initialize_fn.type_signature.parameter is not None:
-      raise errors.TemplateInitFnParamNotEmptyError(
-          f'Provided `initialize_fn` must be a no-arg function, but found '
-          f'input argument(s) {initialize_fn.type_signature.parameter}.')
+    #py_typecheck.check_type(initialize_fn, computation_base.Computation)
+    #if initialize_fn.type_signature.parameter is not None:
+    #  raise errors.TemplateInitFnParamNotEmptyError(
+    #      f'Provided `initialize_fn` must be a no-arg function, but found '
+    #      f'input argument(s) {initialize_fn.type_signature.parameter}.')
     initialize_result_type = initialize_fn.type_signature.result
 
-    py_typecheck.check_type(next_fn, computation_base.Computation)
+    #py_typecheck.check_type(next_fn, computation_base.Computation)
     next_parameter_type = next_fn.type_signature.parameter
     state_type = _infer_state_type(initialize_result_type, next_parameter_type,
                                    next_is_multi_arg)
-
-    next_result_type = next_fn.type_signature.result
-    if state_type.is_assignable_from(next_result_type):
-      # The whole return value is the state type
-      pass
-    elif (_is_nonempty_struct(next_result_type) and
-          state_type.is_assignable_from(next_result_type[0])):
-      # The first return value is state type
-      pass
-    else:
-      raise errors.TemplateStateNotAssignableError(
-          f'The first return argument of `next_fn` must be '
-          f'assignable to its first input argument, but found\n'
-          f'`next_fn` which returns type:\n{next_result_type}\n'
-          f'which does not match its first input argument:\n{state_type}')
+    #
+    #next_result_type = next_fn.type_signature.result
+    #if state_type.is_assignable_from(next_result_type):
+    #  # The whole return value is the state type
+    #  pass
+    #elif (_is_nonempty_struct(next_result_type) and
+    #      state_type.is_assignable_from(next_result_type[0])):
+    #  # The first return value is state type
+    #  pass
+    #else:
+    #  raise errors.TemplateStateNotAssignableError(
+    #      f'The first return argument of `next_fn` must be '
+    #      f'assignable to its first input argument, but found\n'
+    #      f'`next_fn` which returns type:\n{next_result_type}\n'
+    #      f'which does not match its first input argument:\n{state_type}')
 
     self._state_type = state_type
     self._initialize_fn = initialize_fn
