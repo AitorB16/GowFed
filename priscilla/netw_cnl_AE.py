@@ -23,7 +23,8 @@ import sys
 #session = tf.compat.v1.Session(config=config)
 #tf.compat.v1.keras.backend.set_session(session)
 
-root = '/home/tester/Desktop/PRISCI/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
@@ -70,7 +71,7 @@ train_labels = (list(np.array(train_labels).reshape(-1,)))
 test_labels = (list(np.array(test_labels).reshape(-1,)))
 
 
-
+''' Needs to me simplified '''
 #train
 k = 0
 train_indx_anomal = []
@@ -93,16 +94,14 @@ lbls = []
 for e in test_labels:
   if e == 1:
     test_indx_anomal.append(k)
-    lbls.append(0)
+    lbls.append(1)
   else:
     test_indx_norm.append(k)
-    lbls.append(1)
+    lbls.append(0)
   k = k + 1
 
 normal_test_data = test_data[test_indx_norm, :]
 anomalous_test_data = test_data[test_indx_anomal, :]
-
-print(normal_train_data.shape)
 
 def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)

@@ -15,8 +15,8 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 import sys
 
-#root = ''
-root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")
@@ -81,6 +81,7 @@ for id in range(0,NUM_CLIENTS):
   tmp_train_df.columns = tmp_train_df.columns.astype(str)
   tmp_train_df['label'] = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_train_labls.csv', header=None).values
   tmp_train_df_normal = tmp_train_df[tmp_train_df['label'].values == 0]
+  
   tmp_train_dict = {name: np.array(value) 
     for name, value in tmp_train_df_normal.items()}
   train_cl_dict[str(id)]=tmp_train_dict.copy()

@@ -5,7 +5,8 @@ import configparser
 import os
 import sys
 
-root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/cali/Escritorio/FL-IDS/libs")
 

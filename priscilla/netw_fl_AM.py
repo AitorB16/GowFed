@@ -50,7 +50,8 @@ import sys
 #session = tf.compat.v1.Session(config=config)
 #tf.compat.v1.keras.backend.set_session(session)
 
-root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")

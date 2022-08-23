@@ -5,7 +5,8 @@ import configparser
 import os
 import sys
 
-root = '/home/tester/Desktop/PRISCI/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')

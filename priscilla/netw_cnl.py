@@ -23,7 +23,8 @@ import sys
 #session = tf.compat.v1.Session(config=config)
 #tf.compat.v1.keras.backend.set_session(session)
 
-root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+root = ''
+#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
