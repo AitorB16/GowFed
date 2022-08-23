@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in {1..6}
+for i in {2..6}
 do
-    python3 netw_fl_AE.py $i
+    python3 netw_fl_AM.py $i
 done

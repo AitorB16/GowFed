@@ -54,12 +54,15 @@ root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 #sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")
-import simple_fedavg_tff
+#import simple_fedavg_tff
+import simple_fedavg_tff_AM
+
+
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'fl' + sys.argv[1] + '.ini')
 
-BEST_PERC = 0.5
+BEST_PERC = 0.2
 
 # Training hyperparameters
 init = config_obj['SETUP']
@@ -248,12 +251,11 @@ def tff_model_fn():
       metrics=metrics,
       input_spec=train_data.element_type_structure)
 
-iterative_process = simple_fedavg_tff.build_federated_averaging_process(
+iterative_process = simple_fedavg_tff_AM.build_federated_averaging_process(
     tff_model_fn, server_optimizer_fn, client_optimizer_fn)
 server_state = iterative_process.initialize()
 # Keras model that represents the global model we'll evaluate test data on.
 keras_model = create_fedavg_model(only_digits=True)
-#G = [0.0, 0.0]
 
 for round_num in range(TOTAL_ROUNDS):
   cli_metrics_round = []
@@ -267,8 +269,7 @@ for round_num in range(TOTAL_ROUNDS):
       for client in sampled_clients
   ]
 
-
-  cli_metrics, cli_weights = iterative_process.next1(server_state, sampled_train_data)
+  server_state, cli_metrics, cli_weights = iterative_process.next(server_state, sampled_train_data) #, delta
   
   for cli in cli_metrics:
     cli_metrics_round.append(cli.get('binary_accuracy')[0]/cli.get('binary_accuracy')[1])
@@ -282,13 +283,23 @@ for round_num in range(TOTAL_ROUNDS):
     else:
       w_indx.append(0.0)
   
-  print('\n')
-  print(cli_metrics_round)
-  print('\n')
-  print(w_indx)
-  print('\n')
+  #print('\n')
+  #print(cli_metrics_round)
+  #print('\n')
+  #print(w_indx)
+  #print('\n')
 
-  server_state, train_metrics = iterative_process.next2(server_state, sampled_train_data, cli_weights * w_indx)
+  new_weights = []
+  for i1, i2 in zip(cli_weights, w_indx):
+    new_weights.append(i1*i2)
+  
+  #print(new_weights)
+
+  #for i in range(TRAIN_CLIENTS_PER_ROUND):
+  #  if w_indx[i] == 0.0:
+  #    delta[i] = np.zeros(len(delta[i]), dtype=np.float32)
+
+  server_state, train_metrics = iterative_process.next_adv(server_state, sampled_train_data, new_weights)#, delta)
 
 
   if PRINT_SCR:  
