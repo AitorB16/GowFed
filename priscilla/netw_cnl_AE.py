@@ -23,7 +23,7 @@ import sys
 #session = tf.compat.v1.Session(config=config)
 #tf.compat.v1.keras.backend.set_session(session)
 
-root = '/home/cali/Escritorio/FL-IDS/priscilla/'
+root = '/home/tester/Desktop/PRISCI/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'cnl' + sys.argv[1] + '.ini')
@@ -62,15 +62,47 @@ with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
     f.write(CONFIG_STR)
 
 train_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
-train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
+train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None).values
 test_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
-test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
+test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None).values
 
-normal_train_data = train_data[~train_labels]
-normal_test_data = test_data[~test_labels]
+train_labels = (list(np.array(train_labels).reshape(-1,)))
+test_labels = (list(np.array(test_labels).reshape(-1,)))
 
-anomalous_train_data = train_data[train_labels]
-#anomalous_test_data = test_data[test_labels]
+
+
+#train
+k = 0
+train_indx_anomal = []
+train_indx_norm = []
+for e in train_labels:
+  if e == 1:
+    train_indx_anomal.append(k)
+  else:
+    train_indx_norm.append(k)
+  k = k + 1
+
+normal_train_data = train_data[train_indx_norm, :]
+anomalous_train_data = train_data[train_indx_anomal, :]
+
+#test
+k = 0
+test_indx_anomal = []
+test_indx_norm = []
+lbls = []
+for e in test_labels:
+  if e == 1:
+    test_indx_anomal.append(k)
+    lbls.append(0)
+  else:
+    test_indx_norm.append(k)
+    lbls.append(1)
+  k = k + 1
+
+normal_test_data = test_data[test_indx_norm, :]
+anomalous_test_data = test_data[test_indx_anomal, :]
+
+print(normal_train_data.shape)
 
 def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)
@@ -96,7 +128,7 @@ opt = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
 loss = [tf.keras.losses.mae]
 model.compile(optimizer=opt, loss=loss)#, metrics = metrics)
 
-history = model.fit(train_data, train_labels, epochs=EPOCHS, batch_size=BATCH_SIZE,
+history = model.fit(normal_train_data, normal_train_data, epochs=EPOCHS, batch_size=BATCH_SIZE,
                     validation_data=(normal_test_data, normal_test_data),
                     shuffle=True,
                     callbacks=[early_stopping], verbose=PRINT_SCR
@@ -122,8 +154,8 @@ def save_stats(predictions, labels, print_sc=False):
   return (acc + " " + prec + " " + rcl + " " + f1 + " " + roc)
 
 
-reconstruction = model.predict(normal_train_data)
-reconstruction_error = tf.keras.losses.mae(reconstruction, normal_train_data)
+reconstruction = model.predict(normal_test_data)
+reconstruction_error = tf.keras.losses.mae(reconstruction, normal_test_data)
 threshold = np.mean(reconstruction_error) + np.std(reconstruction_error)
 
 reconstruction_test = model.predict(test_data)
@@ -131,7 +163,7 @@ reconstruction_error_test = tf.keras.losses.mae(reconstruction_test, test_data)
 preds = tf.math.greater(reconstruction_error_test, threshold)
 
 
-out = save_stats(np.round(preds, decimals=0), test_labels.astype(int), PRINT_SCR)
+out = save_stats(np.round(preds, decimals=0), lbls, PRINT_SCR)
 
 # save model
 #model.save('/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.h5')
