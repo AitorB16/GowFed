@@ -116,8 +116,9 @@ val_fd_ds = tff.simulation.datasets.TestClientData(val_cl_dict) #normal traf
 def evaluate(keras_model, test_dataset):
   """Evaluate the acurracy of a keras model on a test dataset."""
   #metric = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
-  metric = tf.keras.metrics.BinaryCrossentropy()
+  #metric = tf.keras.metrics.BinaryCrossentropy()
   #metric = tf.keras.metrics.BinaryAccuracy()
+  metric = tf.keras.metrics.MeanSquaredError()
   for batch in test_dataset:
     predictions = keras_model(batch['x'])
     metric.update_state(y_true=batch['y'], y_pred=predictions)
@@ -209,7 +210,8 @@ train_data, valid_data = get_custom_dataset()
 def tff_model_fn():
   """Constructs a fully initialized model for use in federated averaging."""
   keras_model = create_fedavg_model(only_digits=True)
-  loss = [tf.keras.losses.BinaryCrossentropy()]
+  #loss = [tf.keras.losses.BinaryCrossentropy()]
+  loss = [tf.keras.losses.MeanSquaredError()]
   #metrics = [tf.keras.metrics.sparse_categorical_crossentropy()]
   return tff.learning.from_keras_model(
       keras_model,
@@ -246,7 +248,7 @@ for round_num in range(TOTAL_ROUNDS):
 
 def predict(model, data, threshold):
   reconstructions = model(data)
-  loss = tf.keras.losses.mean_squared_error(reconstructions, data)
+  loss = tf.keras.losses.mean_squared_error(y_true=data, y_pred = reconstructions)
   return np.array((tf.math.less(loss, threshold))).astype(int)
 
 def get_accuracy_list(dict):
@@ -288,7 +290,7 @@ for i in range(0, NUM_CLIENTS):
 
   normal_test_features = df_cl[tmp_labels == 0]
   reconstruct_normal = keras_model(np.array(normal_test_features))
-  normal_test_loss = tf.keras.losses.mae(y_true=normal_test_features, y_pred=reconstruct_normal)
+  normal_test_loss = tf.keras.losses.mean_squared_error(y_true=normal_test_features, y_pred=reconstruct_normal)
 
   # anomal_test_features = df_cl[tmp_labels == 1]
   # reconstruct_anomal = keras_model(np.array(anomal_test_features))

@@ -124,7 +124,7 @@ model = create_keras_model()
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=2, mode="min")
 opt = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
 #metrics = [tf.keras.metrics.BinaryAccuracy()]
-loss = [tf.keras.losses.mae]
+loss = [tf.keras.losses.MeanSquaredError()]
 model.compile(optimizer=opt, loss=loss)#, metrics = metrics)
 
 history = model.fit(normal_train_data, normal_train_data, epochs=EPOCHS, batch_size=BATCH_SIZE,
@@ -154,11 +154,11 @@ def save_stats(predictions, labels, print_sc=False):
 
 
 reconstruction = model.predict(normal_test_data)
-reconstruction_error = tf.keras.losses.mae(reconstruction, normal_test_data)
+reconstruction_error = tf.keras.losses.mean_squared_error(y_true=normal_test_data, y_pred = reconstruction)
 threshold = np.mean(reconstruction_error) + np.std(reconstruction_error)
 
 reconstruction_test = model.predict(test_data)
-reconstruction_error_test = tf.keras.losses.mae(reconstruction_test, test_data)
+reconstruction_error_test = tf.keras.losses.mean_squared_error(y_true=test_data, y_pred = reconstruction_test)
 preds = tf.math.greater(reconstruction_error_test, threshold)
 
 

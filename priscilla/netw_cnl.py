@@ -153,6 +153,9 @@ for e in history.history["val_loss"]:
   val_loss = val_loss + str(e) + ' '
 
 with open(result_path + 'stats.txt', 'w') as f:
+  f.write('ACC PREC RCL F1 ROC \n')
+
+with open(result_path + 'stats.txt', 'w') as f:
   f.write(out + " \n")
 
 with open(result_path + 'tr_loss.txt', 'w') as f:

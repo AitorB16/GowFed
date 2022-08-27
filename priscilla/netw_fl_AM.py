@@ -63,6 +63,7 @@ import simple_fedavg_tff_AM
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'fl' + sys.argv[1] + '.ini')
 
+#BEST_PERC = 0.8
 BEST_PERC = 0.2
 
 # Training hyperparameters
@@ -109,7 +110,7 @@ if not os.path.exists(result_path):
   os.mkdir(result_path)
 
 #Save cofiguration
-CONFIG_STR = '[SETUP]\n--AM version-- \nrun_name = ' + RUN_NAME + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
+CONFIG_STR = '[SETUP]\n--AM version-- \nrun_name = ' + RUN_NAME + '\nbest_perc = ' + str(BEST_PERC) + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
 with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
   f.write(CONFIG_STR)
 
@@ -245,7 +246,8 @@ def tff_model_fn():
   keras_model = create_fedavg_model(only_digits=True)
   loss = [tf.keras.losses.BinaryCrossentropy()]
   #loss = tf.keras.losses.BinaryCrossentropy()
-  metrics = [tf.keras.metrics.BinaryAccuracy()]
+  #metrics = [tf.keras.metrics.BinaryAccuracy()]
+  metrics = [tf.keras.metrics.AUC()]
   return tff.learning.from_keras_model(
       keras_model,
       loss=loss,
@@ -273,7 +275,8 @@ for round_num in range(TOTAL_ROUNDS):
   server_state, cli_metrics, cli_weights = iterative_process.next(server_state, sampled_train_data) #, delta
   
   for cli in cli_metrics:
-    cli_metrics_round.append(cli.get('binary_accuracy')[0]/cli.get('binary_accuracy')[1])
+    cli_metrics_round.append(cli.get('auc')[0]/cli.get('auc')[1])
+    #cli_metrics_round.append(cli.get('binary_accuracy')[0]/cli.get('binary_accuracy')[1])
 
   best_vals = sorted(cli_metrics_round)[int(-TRAIN_CLIENTS_PER_ROUND*BEST_PERC):]
 
