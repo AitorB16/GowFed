@@ -1,8 +1,10 @@
 datasets
-priscilla/mats/cnl/*
-priscilla/mats/fl/*
-#priscilla/results/cnl/*
-#priscilla/results/fl/*
-priscilla/NNs/*
+source/mats/cnl/*
+source/mats/fl/*
+#source/results/cnl/*
+#source/results/fl/*
+source/evoFlow/NNs/*
 __pycache__
-gpus.py
+.ipynb_checkpoints
+source/.ipynb_checkpoints
+#*.eps
