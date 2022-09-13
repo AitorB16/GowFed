@@ -12,19 +12,21 @@ import os
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 import sys
-#sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
-#import simple_fedavg_tff
+#simple fedavg
+'''sys.path.append("/home/tester/Desktop/TF/federated/tensorflow_federated/examples/simple_fedavg")
+import simple_fedavg_tff'''
 
-#config = tf.compat.v1.ConfigProto(gpu_options = 
-#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
-## device_count = {'GPU': 1}
-#)
-#config.gpu_options.allow_growth = True
-#session = tf.compat.v1.Session(config=config)
-#tf.compat.v1.keras.backend.set_session(session)
+#gpu setup
+'''
+config = tf.compat.v1.ConfigProto(gpu_options = 
+                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
+# device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)'''
 
 root = ''
-#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'init/cnl/cnl' + sys.argv[1] + '.ini')
@@ -51,21 +53,22 @@ TEST_SIZE = int(init1['test_size'])
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
-#path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
 result_path = root + 'results/cnl/' + RUN_NAME + '/'
 if not os.path.exists(result_path):
   os.mkdir(result_path)
 
 
-#Save cofiguration
+'''Save init cofiguration'''
 CONFIG_STR = '[SETUP]\nrun_name = ' + RUN_NAME + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nepochs = ' + str(EPOCHS) + '\nbatch_size = ' + str(BATCH_SIZE) + '\nlearning_rate = ' + str(LEARNING_RATE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
-with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
+with open(result_path + 'conf.ini', 'w') as f:
     f.write(CONFIG_STR)
 
 train_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/' + 'train.csv', sep='\s+', header=None))
 train_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/train_labls.csv', header=None)
 test_data = np.array(pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test.csv', sep='\s+', header=None))
 test_labels = pd.read_csv(root + 'mats/cnl/' + RUN_NAME + '/test_labls.csv', header=None)
+
+'''TF model'''
 
 def create_keras_model():
   initializer=tf.keras.initializers.GlorotUniform(seed= SEED)
@@ -97,22 +100,12 @@ metrics = [tf.keras.metrics.BinaryAccuracy()]
 loss = [tf.keras.losses.BinaryCrossentropy()]
 model.compile(optimizer=opt, loss=loss, metrics = metrics)
 
+'''Train'''
 history = model.fit(train_data, train_labels, epochs=EPOCHS, batch_size=BATCH_SIZE,
                     validation_data=(test_data, test_labels),
                     shuffle=True,
                     callbacks=[early_stopping], verbose=PRINT_SCR
                     )
-
-
-#if PRINT_SCR:
-#  plt.plot(history.history["loss"], label="Training Loss")
-#  plt.plot(history.history["val_loss"], label="Validation Loss")
-#  plt.yscale('log')
-#  plt.legend()
-
-
-#Results = model.evaluate(test_gower_mat, test_labels)
-#print("test loss, test acc:", results)
 
 
 def save_stats(predictions, labels, print_sc=False):
@@ -132,17 +125,16 @@ def save_stats(predictions, labels, print_sc=False):
 
   return (acc + " " + prec + " " + rcl + " " + f1 + " " + roc)
 
-
+'''Test'''
 preds = model.predict(test_data)
 out = save_stats(np.round(preds, decimals=0), test_labels.astype(int), PRINT_SCR)
 
 
-# save model
-#model.save('/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.h5')
+'''Save the model'''
 model.save(result_path + 'model.h5')
 
 
-# Save result
+''' Save results'''
 tr_loss = ''
 val_loss = ''
 

@@ -3,70 +3,24 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow_federated as tff
-
 import collections
-
-#from absl import app
-#import nest_asyncio
-#nest_asyncio.apply()
-
 import configparser
-#import gower as gd
 import os
-
+import sys
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-import sys
-
-#import sys, os
-#os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
-
-#config = tf.compat.v1.ConfigProto(gpu_options = 
-#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
-#                         device_count = {'GPU': 1}
-#)
-#config.gpu_options.allow_growth = True
-#session = tf.compat.v1.Session(config=config)
-#tf.compat.v1.keras.backend.set_session(session)
-
-#gpu_devices = tf.config.list_physical_devices('GPU')
-#tf.config.set_logical_device_configuration(
-#    gpu_devices[0], 
-#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
-#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
-#tf.config.set_logical_device_configuration(
-#    gpu_devices[1], 
-#    [tf.config.LogicalDeviceConfiguration(memory_limit=10000),
-#     tf.config.LogicalDeviceConfiguration(memory_limit=10000)])
-
-
-#config = tf.compat.v1.ConfigProto(gpu_options = 
-#                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8),
-#                         device_count = {'GPU': 1})
-#print(tf.config.list_logical_devices())
-
-#config.gpu_options.allow_growth = True
-#session = tf.compat.v1.Session(config=config)
-#tf.compat.v1.keras.backend.set_session(session)
-
 root = ''
-#root = '/home/cali/Escritorio/FL-IDS/priscilla/'
 
-#sys.path.append("/home/abelenguer/scratch/projects/FL/TF/federated/tensorflow_federated/examples/simple_fedavg")
 sys.path.append(root + "../libs/federated/tensorflow_federated/examples/simple_fedavg")
-#import simple_fedavg_tff
 import simple_fedavg_tff_AM
-
-
 
 config_obj = configparser.ConfigParser()
 config_obj.read(root + 'init/fl/fl' + sys.argv[1] + '.ini')
 
+'''Percentage of best agents to take part in the averaging'''
 BEST_PERC = 0.8
-#BEST_PERC = 0.2
 
-# Training hyperparameters
+''' Training hyperparameters '''
 init = config_obj['SETUP']
 RUN_NAME = 'F' + sys.argv[1] #init['run_name']
 TOTAL_ROUNDS = int(init['total_rounds'])
@@ -82,11 +36,6 @@ PRINT_SCR = bool(int(init['print_scr']))
 OUTLIERS = init['outliers']
 BALANCE_DATA = bool(int(init['balance_data']))
 
-# NUM_CLIENTS = int(init['num_clients'])
-# SEED = int(init['seed'])
-# TRAIN_SIZE = int(init['train_size'])
-# TEST_SIZE = int(init['test_size'])
-
 config_obj1 = configparser.ConfigParser()
 config_obj1.read(root + 'mats/fl/' + RUN_NAME + '/mat.ini')
 init1 = config_obj1['MATX']
@@ -97,35 +46,31 @@ TEST_SIZE = int(init1['total_test_size'])
 min_client_ds_size = int(init1['min_ds_client'])
 max_client_ds_size = int(init1['max_ds_client'])
 
-#PERCENT_TOLER = 0.5
-#min_client_ds_size = 1500
-
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
-#path = '/home/abelenguer/scratch/projects/FL/TF/centralized/experiments/' + RUN_NAME + '.txt'
 result_path = root + 'results/fl_AM/' + RUN_NAME + '/'
 
 if not os.path.exists(result_path):
   os.mkdir(result_path)
 
-#Save cofiguration
+''' Save cofiguration'''
 CONFIG_STR = '[SETUP]\n--AM version-- \nrun_name = ' + RUN_NAME + '\nbest_perc = ' + str(BEST_PERC) + '\ntotal_rounds = ' + str(TOTAL_ROUNDS) + '\nrounds_per_eval = ' + str(ROUNDS_PER_EVAL) + '\ntrain_clients_per_round = ' + str(TRAIN_CLIENTS_PER_ROUND) + '\nclient_epochs_per_round = ' + str(CLIENT_EPOCHS_PER_ROUND) + '\nbatch_size = ' + str(BATCH_SIZE) + '\ntest_batch_size = ' + str(TEST_BATCH_SIZE) + '\nserver_learning_rate = ' + str(SERVER_LEARNING_RATE) + '\nclient_learning_rate = '+ str(CLIENT_LEARNING_RATE) + '\nnum_clients = ' + str(NUM_CLIENTS) + '\ntrain_size = ' + str(TRAIN_SIZE) + '\ntest_size = ' + str(TEST_SIZE) + '\nbalance_data = ' + str(BALANCE_DATA) + '\noutliers = '+ OUTLIERS +'\nseed = ' + str(SEED) + '\n'
-with open(result_path + 'conf.ini', 'w') as f: #Should be XML?
+with open(result_path + 'conf.ini', 'w') as f:
   f.write(CONFIG_STR)
 
-#TRAIN: Create a dict where keys are client ids format for tff.simulation.datasets.TestClientData
-# Create distance matrix with each client data min_client_ds_size rows
+''' TRAIN: Create a dict where keys are client ids format for tff.simulation.datasets.TestClientData.
+Create distance matrix with each client data min_client_ds_size rows'''
 train_cl_dict = {}
 for id in range(0,NUM_CLIENTS):
-  #tmp_train_df = pd.DataFrame()
   tmp_train_df = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_train.csv', sep='\s+', header=None)
   tmp_train_df.columns = tmp_train_df.columns.astype(str)
   tmp_train_df['label'] = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_train_labls.csv', header=None).values
   tmp_train_dict = {name: np.array(value) 
     for name, value in tmp_train_df.items()}
   train_cl_dict[str(id)]=tmp_train_dict.copy()
-#TEST SPLITED
+
+''' TEST splitted'''
 test_cl_dict = {}
 for id in range(0,NUM_CLIENTS):
   tmp_test_df = pd.read_csv(root + 'mats/fl/' + RUN_NAME + '/' + str(id) + '_test.csv', sep='\s+', header=None)
@@ -135,18 +80,14 @@ for id in range(0,NUM_CLIENTS):
     for name, value in tmp_test_df.items()}
   test_cl_dict[str(id)]=tmp_test_dict.copy()
 
-#CONVERT TO TFF DATASET
-#netw_ds = tf.data.Dataset.from_tensor_slices((netw_features_dict, netw_labels))
-#netw_ds = tf.data.Dataset.from_tensor_slices(netw_features_dict)
+''' Convert to TFF Dataset'''
 train_fd_ds = tff.simulation.datasets.TestClientData(train_cl_dict)
 test_fd_ds = tff.simulation.datasets.TestClientData(test_cl_dict)
 
 
 def evaluate(keras_model, test_dataset):
   """Evaluate the acurracy of a keras model on a test dataset."""
-  #metric = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
   metric = tf.keras.metrics.BinaryCrossentropy()
-  #metric = tf.keras.metrics.BinaryAccuracy()
   for batch in test_dataset:
     predictions = keras_model(batch['x'])
     metric.update_state(y_true=batch['y'], y_pred=predictions)
@@ -160,11 +101,10 @@ def get_custom_dataset():
     features = tf.convert_to_tensor(tmp_features, dtype=tf.float32)
     
     return collections.OrderedDict(
-      # tf.expand_dims? ADD MORE COLUMNS
         x=features, y=element['label'])
 
   def preprocess_train_dataset(dataset):
-    # Use buffer_size same as the maximum client dataset size,
+    ''' Use buffer_size same as the maximum client dataset size'''
     return dataset.map(element_fn).shuffle(buffer_size=max_client_ds_size).repeat(
         count=CLIENT_EPOCHS_PER_ROUND).batch(
             BATCH_SIZE, drop_remainder=False)
@@ -182,17 +122,7 @@ def get_custom_dataset():
   return netw_train, netw_test
 
 
-def create_fedavg_model(only_digits=True):
-  """The CNN model used in https://arxiv.org/abs/1602.05629.
-
-  Args:
-    only_digits: If True, uses a final layer with 10 outputs, for use with the
-      digits only EMNIST dataset. If False, uses 62 outputs for the larger
-      dataset.
-
-  Returns:
-    An uncompiled `tf.keras.Model`.
-  """
+def create_fedavg_model():
   initializer = tf.keras.initializers.GlorotNormal(seed=SEED)
   return tf.keras.models.Sequential([
     tf.keras.layers.Input(shape=(min_client_ds_size,)),
@@ -222,17 +152,15 @@ def server_optimizer_fn():
 def client_optimizer_fn():
   return tf.keras.optimizers.Adam(learning_rate=CLIENT_LEARNING_RATE)
 
-
-#WITH VALIDATION
-
-# If GPU is provided, TFF will by default use the first GPU like TF. The
-# following lines will configure TFF to use multi-GPUs and distribute client
-# computation on the GPUs. Note that we put server computatoin on CPU to avoid
-# potential out of memory issue when a large number of clients is sampled per
-# round. The client devices below can be an empty list when no GPU could be
-# detected by TF.
+'''If GPU is provided, TFF will by default use the first GPU like TF. The
+following lines will configure TFF to use multi-GPUs and distribute client
+computation on the GPUs. Note that we put server computatoin on CPU to avoid
+potential out of memory issue when a large number of clients is sampled per
+round. The client devices below can be an empty list when no GPU could be
+detected by TF.'''
 
 train_loss_list = []
+'''with validation'''
 val_loss_list = []
 
 
@@ -242,11 +170,9 @@ tff.backends.native.set_local_python_execution_context(
     server_tf_device=server_device, client_tf_devices=client_devices)
 train_data, valid_data = get_custom_dataset()
 def tff_model_fn():
-  """Constructs a fully initialized model for use in federated averaging."""
-  keras_model = create_fedavg_model(only_digits=True)
+  '''Constructs a fully initialized model for use in federated averaging.'''
+  keras_model = create_fedavg_model()
   loss = [tf.keras.losses.BinaryCrossentropy()]
-  #loss = tf.keras.losses.BinaryCrossentropy()
-  #metrics = [tf.keras.metrics.BinaryAccuracy()]
   metrics = [tf.keras.metrics.AUC(num_thresholds=200)]
   return tff.learning.from_keras_model(
       keras_model,
@@ -257,12 +183,11 @@ def tff_model_fn():
 iterative_process = simple_fedavg_tff_AM.build_federated_averaging_process(
     tff_model_fn, server_optimizer_fn, client_optimizer_fn)
 server_state = iterative_process.initialize()
-# Keras model that represents the global model we'll evaluate test data on.
-keras_model = create_fedavg_model(only_digits=True)
+''' Keras model that represents the global model we'll evaluate test data on. '''
+keras_model = create_fedavg_model()
 
 for round_num in range(TOTAL_ROUNDS):
   cli_metrics_round = []
-  #simple_fedavg_tff.test()
   sampled_clients = np.random.choice(
       train_data.client_ids,
       size=TRAIN_CLIENTS_PER_ROUND,
@@ -274,6 +199,8 @@ for round_num in range(TOTAL_ROUNDS):
 
   server_state, cli_metrics, cli_weights = iterative_process.next(server_state, sampled_train_data) #, delta
   
+
+  '''Pick best k performing agents based on their ROC-AUC score'''
   for cli in cli_metrics:
     tmp = 0
     vals = cli.get('auc')
@@ -290,22 +217,12 @@ for round_num in range(TOTAL_ROUNDS):
     else:
       w_indx.append(0.0)
   
-  #print('\n')
-  #print(cli_metrics_round)
-  #print('\n')
-  #print(w_indx)
-  #print('\n')
 
   new_weights = []
   for i1, i2 in zip(cli_weights, w_indx):
     new_weights.append(i1*i2)
   
-  #print(new_weights)
-
-  #for i in range(TRAIN_CLIENTS_PER_ROUND):
-  #  if w_indx[i] == 0.0:
-  #    delta[i] = np.zeros(len(delta[i]), dtype=np.float32)
-
+  '''Perform second step of custom FedAVG'''
   server_state, train_metrics = iterative_process.next_adv(server_state, sampled_train_data, new_weights)#, delta)
 
 
@@ -352,7 +269,7 @@ def save_stats(predictions, labels, print_scr=False):
   return (acc + " " + prec + " " + rcl + " " + f1 + " " + roc)
 
 
-  # Save result in txt
+''' Save stats in txt'''
 with open(result_path + 'stats.txt', 'w') as f:
     f.write('CL_ID TRAIN_DS_SIZE ACC PREC RCL F1 ROC \n')
 
@@ -365,11 +282,10 @@ for i in range(0, NUM_CLIENTS):
     with open(result_path + 'stats.txt', 'a') as f:
         f.write(out + " \n")
 
-# save model
+'''Save model'''
 keras_model.save(result_path + 'model.h5')
-#model = tf.keras.models.load_model("./experiments/e3.h5")
 
-# Save result
+'''Save train/test losses'''
 tr_loss = ''
 val_loss = ''
 

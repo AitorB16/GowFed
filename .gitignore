@@ -1,4 +1,4 @@
-datasets
+datasets/*
 source/mats/cnl/*
 source/mats/fl/*
 #source/results/cnl/*

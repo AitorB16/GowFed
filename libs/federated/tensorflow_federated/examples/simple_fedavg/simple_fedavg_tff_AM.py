@@ -120,7 +120,7 @@ def build_federated_averaging_process(
   @tff.federated_computation(federated_server_state_type,
                              federated_dataset_type)
   def run_one_round1(server_state, federated_dataset):
-    """Orchestration logic for one round of computation.
+    """Orchestration logic for one round of computation (part 1).
 
     Args:
       server_state: A `ServerState` containing the state of the training process
@@ -129,7 +129,7 @@ def build_federated_averaging_process(
         `tff.CLIENTS` containing data to train the current round on.
 
     Returns:
-      A tuple of updated `ServerState` and `tf.Tensor` of average loss.
+      A tuple of updated `ServerState` and `client_outputs` corresponsing to local models' weights.
     """
     server_message = tff.federated_map(server_message_fn, server_state)
     server_message_at_client = tff.federated_broadcast(server_message)
@@ -143,7 +143,7 @@ def build_federated_averaging_process(
   @tff.federated_computation(federated_server_state_type,
                              federated_dataset_type, tff.FederatedType(tf.float32, tff.CLIENTS))#, tff.FederatedType(tff.SequenceType(tf.float32), tff.CLIENTS))
   def run_one_round2(server_state, federated_dataset, cli_weights):#, new_delta):
-    """Orchestration logic for one round of computation.
+    """Orchestration logic for one round of computation (part 2).
 
     Args:
       server_state: A `ServerState` containing the state of the training process
