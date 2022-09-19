@@ -128,7 +128,7 @@ For better visualizing the results, [visualize_results_cnl.ipynb](source/visuali
 
 ## Changes in libraries
 
-### Gower matrix elaboration
+### Gower matrices elaboration
 
 *gower_matrix_limit_cols* and *sliced_gower_matrix_limit_cols* methods have been added to [gower_dist.py](libs/gower/gower/gower_dist.py) in order to segment the matrices in train/test subsets efficiently.
 
